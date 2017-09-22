@@ -1,0 +1,33 @@
+html,
+body {
+  background: #f1f1f1;
+  font-family: sans-serif;
+  font-size: 18px;
+  height: 100%;
+  width: 100%;
+}
+
+a,
+button {
+  
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.mdl-layout__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.wrapper {
+  flex: 1;
+  margin: 0 auto;
+  max-width: 992px;
+  padding-top: 40px;
+  width: 70%; 
+
+  .mdl-spinner {
+    left: calc(50% - 14px);
+  }
+}

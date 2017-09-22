@@ -1,0 +1,52 @@
+@import '../../global/scss/variables.scss';
+
+.counter {
+
+  .counter__buttons {
+    align-items: center;
+    display: flex;
+    bottom: 15px;
+    justify-content: flex-end;
+    position: absolute;
+    right: 15px;
+    user-select: none;
+
+    .counter__buttons--minus,
+    .counter__buttons--plus {
+      align-items: center;
+      color: #000;
+      display: flex;
+      font-size: 18px;
+      height: 35px;
+      justify-content: center;
+      margin: 0 5px;
+      min-height: initial;
+      min-width: initial;
+      width: 35px;
+    }
+
+    .counter__buttons--minus {
+
+        &:focus {
+          background-color: $secondary !important;
+        }
+    }
+
+    .counter__buttons--plus {
+
+        &:focus {
+          background-color: $primary !important;
+        }
+    }
+  }
+  
+  .counter__points {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+  }
+}

@@ -1,0 +1,64 @@
+@import '../../global/scss/variables.scss';
+
+.story-box {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 45px;
+
+  &.error {
+    
+    .error-message {
+      color: $secondary;
+      margin-bottom: 15px;
+    }
+
+    .story-box__story {
+      border-color: $secondary;
+
+      &:focus {
+        border-color: $secondary !important; //errors should override invalid
+      }
+    }
+  } 
+
+  &.invalid {
+
+    .story-box__story {
+
+      &:focus {
+        border-color: #f1a83d;
+      }
+    }
+    
+    .story-box__submit {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+  }
+
+  .story-box__story {
+    border: 1px solid #000;
+    font-size: 18px;
+    height: 100px;
+    outline: none;
+    margin-bottom: 15px;
+    padding: 15px;
+    transition: border-color 500ms ease-in-out;
+
+    &:focus {
+      border-color: $primary;
+    }
+  }
+
+  .story-box__submit {
+    align-self: flex-end;
+    background-color: transparent;
+    border: 1px solid #000;
+    border-radius: 0;
+    font-size: 18px;
+    outline: none;
+    padding: 15px;
+    transition: opacity 500ms ease-in-out;
+    width: 150px;
+  }
+}
