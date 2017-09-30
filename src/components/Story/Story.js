@@ -12,6 +12,7 @@ const Story = (props) => {
         <li className='story mdl-shadow--4dp'>
             <span className='story__date'>{formattedDate}</span>
             <p className='story__text'>{props.story}</p>
+            {props.storyImageUrl && <img alt='picture depection of the story' src={props.storyImageUrl} />}
             <span className='story__signature'>&mdash; Yes, I was high</span>
             <Counter points={props.points} storyID={props.storyID} />
         </li>

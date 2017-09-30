@@ -1,4 +1,4 @@
-const config = require('./config.js');
+const config = require('./src/global/js/config.js');
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
@@ -6,9 +6,20 @@ const helmet = require('helmet');
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectID;
 const path = require('path');
+const RateLimit = require('express-rate-limit');
 const ReactEngine = require('express-react-engine');
 const PORT = process.env.PORT || 1243;
 var db;
+
+
+// Enable for live
+app.enable('trust proxy');
+
+const limiter = new RateLimit({
+  windowMs: 15*60*1000, // 15 minutes 
+  max: 100, // limit each IP to 100 requests per windowMs 
+  delayMs: 0 // disable delaying - full speed until the max limit is reached 
+});
 
 
 /**
@@ -19,6 +30,7 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(helmet());
+app.use(limiter);
 
 
 /**
@@ -36,6 +48,7 @@ MongoClient.connect(config.connectionString, (err, database) => {
     console.log('EXPRESS SERVER IS LISTENING');
   });
 });
+
 
 /**
  * GET handler for requests to the root.
@@ -62,10 +75,10 @@ app.get('/stories', (req, res) => {
  * POST handler to save stories to the mongo collection.
  */
 app.post('/stories', (req, res) => {
-  const validRegExp = new RegExp(/^[\w\-\,\.\(\)\/\!\$\'\"\s]+$/);
+  const validRegExp = new RegExp(/^[\w\-\,\.\(\)\/\!\$\?\'\"\s]+$/);
 
-  // Adds the new story to the collection if it meets the RegEx requirements.
   if (validRegExp.test(req.body.story)) {
+    console.log('REQ BODY: ', req.body);
     db.collection('stories').insert(req.body, (err, result) => {
       if (err) {
         console.log('ERROR POSTING: ', err);
@@ -75,6 +88,7 @@ app.post('/stories', (req, res) => {
       res.redirect('/');
     });
   }
+
 });
 
 /**

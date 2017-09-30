@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import DebounceInput from 'react-debounce-input';
+import ImageUploader from 'containers/ImageUploader/ImageUploader'
 import classNames from 'classnames';
 import './StoryBox.scss';
 
@@ -27,12 +28,16 @@ const StoryBox = (props) => {
 
             {props.shouldErrorMessageShow && <p className='error-message'>{errorMessage}</p>}
 
-            <button 
-                className='story-box__submit'
-                onClick={props.validateStory}
-            >
-                Submit
-            </button>
+            {props.isValidStory && (
+                <button 
+                    className='story-box__submit'
+                    onClick={props.validateStory}
+                >
+                    Submit
+                </button>
+            )}
+
+            <ImageUploader updateStoryImage={props.updateStoryImage} />
         </div>
     );
 };

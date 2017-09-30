@@ -17,6 +17,7 @@ export default class App extends Component {
         
         this.state = {
             filteredStories: [],
+            storyImageUrl: null,
             isFetched: false,
             isPosted: false,
             isValidStory: false,
@@ -40,6 +41,7 @@ export default class App extends Component {
         this.setState((prevState) => {
             return {
                 filteredStories: [...prevState.filteredStories, newStory],
+                storyImageUrl: null,
                 isPosted: true,
                 stories: [...prevState.stories, newStory],
                 story: ''
@@ -68,11 +70,13 @@ export default class App extends Component {
     }    
 
     /**
-     * Posts our form data to the server.
+     * Constructs the story based on the current values and
+     * posts our form data to the server.
      */
     postData = () => {
         const newStory = {
             date: Date.now(),
+            storyImageUrl: this.state.storyImageUrl,
             points: 0,
             story: this.state.story
         };
@@ -170,13 +174,25 @@ export default class App extends Component {
     updateStory = (e) => {
         const story = e.target.value;
         const length = story.length;
-        const validRegExp = new RegExp(/^[\w\-\,\.\(\)\/\!\$\'\"\s]+$/);
+        const validRegExp = new RegExp(/^[\w\-\,\.\(\)\/\!\$\?\'\"\s]+$/);
         const isValidCharacters = validRegExp.test(story);
 
         this.setState({
             isValidStory: length > 9 && isValidCharacters,
             shouldErrorMessageShow: length > 0 && (length <= 9 || !isValidCharacters),
             story: story
+        });
+    }
+
+    /**
+     * Called when an image is dropped into the uploader. Sets the state
+     * with the url dropped/uploaded image.
+     *
+     * @param     { String url }
+     */
+    updateStoryImage = (url) => {
+        this.setState({
+            storyImageUrl: url
         });
     }
 
@@ -211,6 +227,7 @@ export default class App extends Component {
                                     shouldErrorMessageShow={this.state.shouldErrorMessageShow}
                                     story={this.state.story}
                                     updateStory={this.updateStory}
+                                    updateStoryImage={this.updateStoryImage}
                                     validateStory={this.validateStory}
                                 />
 

@@ -16,6 +16,7 @@ const StoryList = (props) => {
                     points={story.points}
                     story={story.story} 
                     storyID={story._id}
+                    storyImageUrl={story.storyImageUrl}
                 />
             );
         });
