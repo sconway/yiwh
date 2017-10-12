@@ -1,20 +1,33 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 import Dropzone from 'react-dropzone';
-import request from 'superagent';
-import { url } from 'global/js/config.js';
+import './ImageUploader.scss';
 
-
-const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/yesiwas/upload';
-const UPLOAD_PRESET = 'yesiwas';
 
 export default class ImageUploader extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            uploadedFile: null,
-            uploadedFileCloudinaryUrl: ''
+            didImageDrop: false,
+            didImageLoad: false,
+            imagePreview: null
         };
+    }
+
+    /**
+     * Called when the image close button is clicked. Sets the image uploader
+     * state back to the default.
+     */
+    onImageClose = () => {
+        this.setState({
+            didImageDrop: false,
+            didImageLoad: false,
+            imagePreview: null
+        });
+
+        // Set the image URL back to null in the parent's state.
+        this.props.updateStoryImage(null);
     }
 
     /**
@@ -25,58 +38,75 @@ export default class ImageUploader extends Component {
      */
     onImageDrop = (files) => {
         if (files.length > 0) {
-            this.setState({
-                uploadedFile: files[0]
+            this.setState({ 
+                didImageDrop: true,
+                imagePreview: files[0].preview
             });
 
-            this.handleImageUpload(files[0]);
+            // Set the story image based on the dropped file
+            this.props.updateStoryImage(files[0]);
         }
     }
 
     /**
-     * Posts to cloudinary with the provided image and
-     * updates the state with the response.
-     *
-     * @param     {Object} : file
-     */
-    handleImageUpload = (file) => {
-        let upload = request.post(CLOUDINARY_UPLOAD_URL)
-                     .field('upload_preset', UPLOAD_PRESET)
-                     .field('file', file);
-
-        upload.end((err, response) => {
-            if (err) console.error(err);
-
-            // If we got a good response, update the local and parent state
-            // with the url of our uploaded image.
-            if (response.body.secure_url !== '') {
-                this.setState({
-                    uploadedFileCloudinaryUrl: response.body.secure_url
-                });
-
-                this.props.updateStoryImage(response.body.secure_url);
-            }
-        });
+     * Called when the preview image is loaded. Sets the state 
+     * that toggles the spinner loader.
+     */    
+    onImageLoad = () => {
+        this.setState({ didImageLoad: true })
     }
 
     render() {
-        return (
-            <form>
-                <div className="FileUpload">
-                    <Dropzone
-                        onDrop={this.onImageDrop}
-                        multiple={false}
-                        accept="image/*">
-                        <div>Drop an image or click to select a file to upload.</div>
-                    </Dropzone>
-                </div>
+        const imageClasses = classNames('image-uploader__preview', {
+            'loaded': this.state.didImageLoad
+        });
+        const dropzoneClasses = classNames('image-uploader__dropzone', {
+            'image-dropped': this.state.didImageDrop
+        });
 
-                <div>
-                    {this.state.uploadedFileCloudinaryUrl === '' ? null :
+        return (
+            <form className='image-uploader'>
+                <Dropzone
+                    accept='image/*'
+                    activeClassName='active'
+                    className={dropzoneClasses}
+                    multiple={false}
+                    onDrop={this.onImageDrop}
+                    rejectClassName='rejected'
+                >
+                    {({isDragActive, isDragReject}) => {
+                        if (isDragReject) return 'Are you dragging an image from another site? How high are you?';
+                        if (isDragActive) return 'Looks good to me. Drop that shit.';
+                        return 'Drop an image or click to select a file to upload.';
+                    }}
+                </Dropzone>
+
+                {this.state.didImageDrop && !this.state.didImageLoad && (
+                    <div className='image-uploader__loader'>
+                        <svg className='circular' viewBox='25 25 50 50'>
+                            <circle className='path' cx='50' cy='50' r='20' fill='none' stroke-width='2' stroke-miterlimit='10'/>
+                        </svg>
+                    </div>
+                )}
+
+                {this.state.imagePreview && (
                     <div>
-                        <img src={this.state.uploadedFileCloudinaryUrl} />
-                    </div>}
-                </div>
+                        <button 
+                            className='image-uploader__close mdl-button mdl-button--fab mdl-button--colored mdl-button--secondary mdl-js-button mdl-js-ripple-effect'
+                            onClick={this.onImageClose}
+                        >
+                            <span className='image-uploader__close__x'>+</span>
+                        </button>
+
+                        <img 
+                            alt='preview of the uploaded file'
+                            className={imageClasses} 
+                            onLoad={this.onImageLoad}
+                            src={this.state.imagePreview} 
+                            title='file preview'
+                        />
+                    </div>
+                )}
             </form>
         );
     }

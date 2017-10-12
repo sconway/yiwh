@@ -47,7 +47,6 @@ export default class Counter extends Component {
      * Posts our point data to the server.
      */
     postData = () => {
-        console.log('posting points');
         const pointUpdate = {
             points: this.state.points,
             storyID: this.props.storyID
@@ -78,13 +77,13 @@ export default class Counter extends Component {
             <div className='counter'>
                 <div className='counter__buttons'>
                     <button 
-                        className='counter__buttons--plus  mdl-button mdl-button--fab mdl-button--colored  mdl-button--primary mdl-js-button mdl-js-ripple-effect'
+                        className='counter__buttons--plus mdl-button mdl-button--fab mdl-button--colored  mdl-button--primary mdl-js-button mdl-js-ripple-effect'
                         onClick={this.incrementCount}
                     >
                         <span>+</span>
                     </button>
                     <button 
-                        className='counter__buttons--minus  mdl-button mdl-button--fab mdl-button--colored mdl-js-button mdl-js-ripple-effect'
+                        className='counter__buttons--minus mdl-button mdl-button--fab mdl-button--colored mdl-js-button mdl-js-ripple-effect'
                         onClick={this.decrementCount}
                     >
                         <span>-</span>

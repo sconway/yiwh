@@ -13,6 +13,7 @@ const StoryList = (props) => {
                 <Story 
                     date={story.date}
                     key={story._id}
+                    mindState={story.mindState}
                     points={story.points}
                     story={story.story} 
                     storyID={story._id}

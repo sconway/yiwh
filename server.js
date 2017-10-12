@@ -75,7 +75,7 @@ app.get('/stories', (req, res) => {
  * POST handler to save stories to the mongo collection.
  */
 app.post('/stories', (req, res) => {
-  const validRegExp = new RegExp(/^[\w\-\,\.\(\)\/\!\$\?\'\"\s]+$/);
+  const validRegExp = new RegExp(/^[\w\-\,\.\(\)\/\!\$\?\:\;\'\"\s]+$/);
 
   if (validRegExp.test(req.body.story)) {
     console.log('REQ BODY: ', req.body);

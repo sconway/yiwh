@@ -1,15 +1,21 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import request from 'superagent';
 import Drawer from 'components/Drawer/Drawer';
 import Header from 'containers/Header/Header';
 import Footer from 'components/Footer/Footer';
+import Message from 'components/Message/Message';
 import StoryBox from 'components/StoryBox/StoryBox';
 import StoryList from 'components/StoryList/StoryList';
 import { defaultDate } from 'global/js/helpers';
+import { url } from 'global/js/config.js';
 import 'global/js/material';
 import 'global/scss/reset.scss';
 import 'global/scss/material.scss';
 import './App.scss';
+
+const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/yesiwas/upload';
+const UPLOAD_PRESET = 'yesiwas';
 
 export default class App extends Component {
     constructor(props) {
@@ -17,13 +23,16 @@ export default class App extends Component {
         
         this.state = {
             filteredStories: [],
-            storyImageUrl: null,
             isFetched: false,
             isPosted: false,
+            isPosting: false,
             isValidStory: false,
+            mindState: 'neither',
             shouldErrorMessageShow: false,
+            shouldStoryboxShow: false,
             story: '',
-            stories: []
+            stories: [],
+            storyImage: null
         };
     }
 
@@ -41,8 +50,10 @@ export default class App extends Component {
         this.setState((prevState) => {
             return {
                 filteredStories: [...prevState.filteredStories, newStory],
-                storyImageUrl: null,
                 isPosted: true,
+                isPosting: false,
+                isValidStory: false,
+                mindState: 'neither',
                 stories: [...prevState.stories, newStory],
                 story: ''
             };
@@ -67,20 +78,38 @@ export default class App extends Component {
         .catch((err) => {
             console.log('Error Fetching: ', err);
         });
+    }
+
+    /**
+     * Called when a radio button option for the mental state
+     * radio buttons is selected. Sets the state with the value. 
+     * 
+     * @param     {String : value}
+     */
+    handleRadioButtonSelection = (value) => {
+        this.setState({ mindState: value });
+    }
+
+    /**
+     * Called when the toggle text above the story box is clicked.
+     * Sets the state to show or hide the story box.
+     */
+    handleStoryBoxToggle = () => {
+        this.setState((prevState) => {
+            return {
+                shouldStoryboxShow: !prevState.shouldStoryboxShow
+            };
+        });
     }    
 
     /**
      * Constructs the story based on the current values and
      * posts our form data to the server.
+     *
+     * @param     {Object : newStory}
      */
-    postData = () => {
-        const newStory = {
-            date: Date.now(),
-            storyImageUrl: this.state.storyImageUrl,
-            points: 0,
-            story: this.state.story
-        };
-
+    postData = (newStory) => {
+        console.log('posting: ', newStory);
         fetch('/stories', {
             method: 'POST',
             headers: {
@@ -174,7 +203,7 @@ export default class App extends Component {
     updateStory = (e) => {
         const story = e.target.value;
         const length = story.length;
-        const validRegExp = new RegExp(/^[\w\-\,\.\(\)\/\!\$\?\'\"\s]+$/);
+        const validRegExp = new RegExp(/^[\w\-\,\.\(\)\/\!\$\?\:\;\'\"\s]+$/);
         const isValidCharacters = validRegExp.test(story);
 
         this.setState({
@@ -188,19 +217,50 @@ export default class App extends Component {
      * Called when an image is dropped into the uploader. Sets the state
      * with the url dropped/uploaded image.
      *
-     * @param     { String url }
+     * @param     { Object } : file
      */
-    updateStoryImage = (url) => {
-        this.setState({
-            storyImageUrl: url
-        });
+    updateStoryImage = (file) => {
+        this.setState({ storyImage: file });
     }
 
     /**
      * Makes sure that a valid story was entered.
      */
     validateStory = () => {
-        if (this.state.isValidStory) this.postData();
+        let newStory = {
+            date: Date.now(),
+            mindState: this.state.mindState,
+            points: 0,
+            story: this.state.story,
+            storyImageUrl: null
+        };
+
+        // Don't bother if it's not a valid story.
+        if (this.state.isValidStory) {
+            // Set the state to display the loading spinner.
+            this.setState({ isPosting: true });
+
+            // If there is a story image upload it before posting the story
+            if (this.state.storyImage) {
+                let upload = request.post(CLOUDINARY_UPLOAD_URL)
+                     .field('upload_preset', UPLOAD_PRESET)
+                     .field('file', this.state.storyImage);
+
+                upload.end((err, response) => {
+                    if (err) console.error(err);
+
+                    // If we got a good response, update new story with
+                    // the url for the image to be used later.
+                    if (response.body.secure_url !== '')
+                        newStory.storyImageUrl = response.body.secure_url;
+
+                    this.postData(newStory);
+                });
+
+            } else {
+                this.postData(newStory);
+            }
+        }
     }
 
     render() {
@@ -217,19 +277,29 @@ export default class App extends Component {
                 <Drawer />
 
                 <main className="mdl-layout__content">
+                    {this.state.isPosted && <Message />}
+
                     <div className='wrapper'>
                         {!this.state.isFetched && <div className="mdl-spinner mdl-js-spinner is-active"></div>}
 
                         {this.state.isFetched && (
                             <div>
-                                <StoryBox
-                                    isValidStory={this.state.isValidStory}
-                                    shouldErrorMessageShow={this.state.shouldErrorMessageShow}
-                                    story={this.state.story}
-                                    updateStory={this.updateStory}
-                                    updateStoryImage={this.updateStoryImage}
-                                    validateStory={this.validateStory}
-                                />
+                                {!this.state.isPosted && (
+                                    <StoryBox
+                                        handleRadioButtonSelection={this.handleRadioButtonSelection}
+                                        handleStoryBoxToggle={this.handleStoryBoxToggle}
+                                        isPosting={this.state.isPosting}
+                                        isPosted={this.state.isPosted}
+                                        isValidStory={this.state.isValidStory}
+                                        shouldErrorMessageShow={this.state.shouldErrorMessageShow}
+                                        shouldStoryBoxShow={this.state.shouldStoryboxShow}
+                                        story={this.state.story}
+                                        storyImage={this.state.storyImage}
+                                        updateStory={this.updateStory}
+                                        updateStoryImage={this.updateStoryImage}
+                                        validateStory={this.validateStory}
+                                    />
+                                )}
 
                                 <StoryList stories={this.state.filteredStories} />
                             </div>

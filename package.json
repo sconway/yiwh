@@ -1,7 +1,7 @@
 {
-  "name": "yesiwashigh",
+  "name": "yesiwas",
   "version": "1.0.0",
-  "description": "A website with stories of people's experiences while high",
+  "description": "A website with stories of people's experiences or thoughts while drunk/high/sober",
   "main": "index.js",
   "scripts": {
     "test": "npm test",
@@ -11,10 +11,8 @@
     "yes",
     "i",
     "was",
-    "high",
-    "weed",
-    "drugs",
-    "marijuana",
+    "gifs",
+    "images",
     "funny",
     "story",
     "stories",
