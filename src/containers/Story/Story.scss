@@ -1,0 +1,46 @@
+.story-wrapper {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  
+  .story {
+    background: #fff;
+    margin-bottom: 15px;
+    min-height: 100px;
+    padding: 15px 100px 45px 30px;
+    position: relative;
+
+    .story__comment-toggle {
+      background-color: transparent;
+      border: 1px solid black;
+      bottom: 15px;
+      outline: transparent;
+      padding: 10px;
+      position: absolute;
+      right: 140px;
+    }
+
+    .story__date {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+    }
+
+    .story__image {
+      display: block;
+      height: auto;
+      margin: 0 auto;
+      max-width: 50%;
+    }
+
+    .story__text {
+      font-size: 18px;
+    }
+
+    .story__signature {
+      display: block;
+      padding-top: 20px;
+    }
+  }
+}

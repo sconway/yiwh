@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import Story from 'components/Story/Story';
+import Story from 'containers/Story/Story';
 import './StoryList.scss';
 
 const StoryList = (props) => {
@@ -10,7 +10,8 @@ const StoryList = (props) => {
     const buildStoryList = () => {
         return props.stories.map((story, index) => {
             return (
-                <Story 
+                <Story
+                    comments={story.comments}
                     date={story.date}
                     key={story._id}
                     mindState={story.mindState}

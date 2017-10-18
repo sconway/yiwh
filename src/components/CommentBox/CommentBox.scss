@@ -1,0 +1,53 @@
+@import '../../global/scss/variables.scss';
+
+.comment-box {
+  display: flex;
+  flex-direction: column;
+  max-height: 0px;
+  overflow: hidden;
+  position: relative;
+  transition: max-height 325ms ease-in-out;
+
+  .comment-box__add-comment {
+    font-size: 20px;
+    height: 30px;
+    min-height: initial;
+    min-width: initial;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 30px;
+
+    &:focus {
+      background-color: $primary !important; // I blame material design...
+    }
+  }
+
+  .comment-box__comment {  
+    font-size: 14px;
+    min-height: 60px;
+    padding: 10px 45px 10px 15px;
+  }
+
+  &.error {
+    
+    .error-message {
+      color: $secondary;
+      margin-bottom: 15px;
+    }
+
+    .comment-box__comment {
+      border-color: $secondary;
+      margin-bottom: 10px;
+
+      &:focus {
+        border-color: $secondary !important; //errors should override invalid
+      }
+    }
+  } 
+
+  &.visible {
+    margin-bottom: 30px;
+    max-height: 300px;
+  }
+}

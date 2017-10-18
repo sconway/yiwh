@@ -72,13 +72,32 @@ app.get('/stories', (req, res) => {
 });
 
 /**
+ * POST handler for saving comments to the various stories.
+ */
+app.post('/comments', (req, res) => {
+  const validRegExp = new RegExp(/^[\w\-\,\.\(\)\/\!\$\?\:\;\'\"\s]+$/);
+
+  // If the comment is valid, update the comments
+  // array of the story that it's for.
+  if (validRegExp.test(req.body.comment)) {
+    db.collection('stories').update(
+      { _id: ObjectId(req.body.storyID) },
+      { $push: { comments: req.body } }
+    );
+
+    res.redirect('/');
+  }
+});
+
+/**
  * POST handler to save stories to the mongo collection.
  */
 app.post('/stories', (req, res) => {
   const validRegExp = new RegExp(/^[\w\-\,\.\(\)\/\!\$\?\:\;\'\"\s]+$/);
 
+  // If the story is valid, update the stories
+  // collection with the new story.
   if (validRegExp.test(req.body.story)) {
-    console.log('REQ BODY: ', req.body);
     db.collection('stories').insert(req.body, (err, result) => {
       if (err) {
         console.log('ERROR POSTING: ', err);

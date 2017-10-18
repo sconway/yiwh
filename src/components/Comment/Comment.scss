@@ -1,0 +1,34 @@
+.comment {
+  align-self: flex-end;
+  background-color: #fff;
+  line-height: 1.3;
+  max-height: 0;
+  overflow: scroll;
+  padding: 0 15px;
+  transition: max-height 500ms ease-in-out,
+              margin-bottom 500ms ease-in-out,
+              padding-bottom 500ms ease-in-out,
+              padding-top 500ms ease-in-out;
+  width: calc(100% - 80px);
+
+  &.visible {
+    max-height: 100px;
+    padding: 15px;
+    margin-bottom: 10px;
+
+    &:last-of-type {
+      margin-bottom: 15px;
+    }
+  }
+
+  .comment__date {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  .comment__text {
+    line-height: 1.3;
+  }
+}

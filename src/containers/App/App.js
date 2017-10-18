@@ -228,6 +228,7 @@ export default class App extends Component {
      */
     validateStory = () => {
         let newStory = {
+            comments: [],
             date: Date.now(),
             mindState: this.state.mindState,
             points: 0,
