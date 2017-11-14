@@ -18,5 +18,34 @@ export const debounce = (func, wait, immediate) => {
     };
 };
 
+/**
+ * One of many possible throttle function implementations..
+ */
+export const throttle = (func, limit) => {
+    let inThrottle;
+    let lastFunc;
+    let lastRan;
+
+    return () => {
+        const context = this;
+        const args = arguments;
+
+        if (!inThrottle) {
+            func.apply(context, args);
+            lastRan = Date.now();
+            inThrottle = true;
+        } else {
+            clearTimeout(lastFunc);
+
+            lastFunc = setTimeout(() => {
+                if ((Date.now() - lastRan) >= limit) {
+                    func.apply(context, args);
+                    lastRan = Date.now();
+                }
+            }, limit - (Date.now() - lastRan));
+        }
+    };
+};
+
 // Sample date used in the event there is a missing date.
 export const defaultDate = new Date('December 17, 1995 03:24:00');

@@ -1,16 +1,76 @@
+@import '../../global/scss/breakpoints.scss';
+@import '../../global/scss/variables.scss';
+
 .radio-buttons {
   display: flex;
-  margin-bottom: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
 
   .radio-buttons__button {
+    display: none;
     margin-right: 5px;
-  }
 
-  .radio-buttons__label {
-    margin-right: 15px;
+    & + .radio-buttons__label {
+      cursor: pointer;
+      margin-right: 15px;
+      padding-left: 30px;
+      position: relative;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+
+      &::before {
+        content: "";
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background-color: rgba(0, 0, 0, 0.5);
+        border: 0px solid #000;
+        font-size: 0;
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        transform: translate(-50%, 50%);
+        transition: all 250ms cubic-bezier(.4,.25,.3,1);
+      }
+      
+      &::after {
+        content: "";
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        position: absolute;
+        bottom: 10px;    
+        left: 10px;
+        transform: translate(-50%, 50%);
+        transition: all 250ms cubic-bezier(.4,.25,.3,1);
+      }
+    }
+
+    &:checked + .radio-buttons__label{
+      &::before {
+        background-color: transparent;
+        width: 20px;
+        height: 20px;
+        border-width: 2px;
+      }
+      
+      &::after {
+        background-color: #000;
+        width: 15px;
+        height: 15px;
+      }
+    }
   }
 
   .radio-buttons__text {
+    flex: 100%;
+    font-size: 20px;
     margin-right: 15px;
+    margin-bottom: 15px;
+  
+    @include for-phone-up {
+      flex: inherit;
+      margin-bottom: 0;
+    }
   }
 }

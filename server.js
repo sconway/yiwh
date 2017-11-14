@@ -9,7 +9,7 @@ const path = require('path');
 const RateLimit = require('express-rate-limit');
 const ReactEngine = require('express-react-engine');
 const PORT = process.env.PORT || 1243;
-var db;
+var db, storyCount;
 
 
 // Enable for live
@@ -49,7 +49,6 @@ MongoClient.connect(config.connectionString, (err, database) => {
   });
 });
 
-
 /**
  * GET handler for requests to the root.
  */
@@ -60,14 +59,23 @@ app.get('/', (req, res) => {
 /**
  * GET handler for stories requests.
  */
-app.get('/stories', (req, res) => {
+app.get('/stories/:startIndex/:endIndex', (req, res) => {
+  const startIndex = parseInt(req.params.startIndex);
+  const endIndex = parseInt(req.params.endIndex);
+
+  db.collection('stories').count().then((count) => {
+    storyCount = count;
+  });
+
   // Finds all the stories in the collection, sorts them into
   // an array and sends them back to the client.
   db.collection('stories')
     .find()
+    .skip(startIndex)
+    .limit(endIndex)
     .sort({ 'points': -1 })
     .toArray((err, results) => {
-      res.send(results);
+      res.send({stories: results, count: storyCount});
     });
 });
 

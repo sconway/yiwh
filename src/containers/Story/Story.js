@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import CommentBox from 'components/CommentBox/CommentBox';
 import CommentList from 'components/CommentList/CommentList';
@@ -6,7 +6,7 @@ import Counter from 'components/Counter/Counter';
 import { defaultDate } from 'global/js/helpers';
 import './Story.scss';
 
-export default class Story extends Component {
+export default class Story extends PureComponent {
     constructor(props) {
         super(props);
         
@@ -108,31 +108,35 @@ export default class Story extends Component {
         return (
             <li className='story-wrapper'>
                 <div className='story mdl-shadow--4dp'>
-                    <span className='story__date'>{formattedDate}</span>
+                    <section className='story__body'>
+                        <span className='story__date'>{formattedDate}</span>
 
-                    <p className='story__text'>{this.props.story}</p>
+                        <p className='story__text'>{this.props.story}</p>
 
-                    {this.props.storyImageUrl && (
-                        <img 
-                            alt='visual depiction of the story' 
-                            className='story__image' 
-                            src={this.props.storyImageUrl} 
-                        />
-                    )}
+                        {this.props.storyImageUrl && (
+                            <img 
+                                alt='visual depiction of the story' 
+                                className='story__image' 
+                                src={this.props.storyImageUrl} 
+                            />
+                        )}
 
-                    {this.props.mindState && this.props.mindState.toLowerCase() !== 'neither' && (
-                        <span className='story__signature'>
-                            &mdash; Yes, I was {this.props.mindState}
-                        </span>
-                    )}
+                        {this.props.mindState && this.props.mindState.toLowerCase() !== 'neither' && (
+                            <span className='story__signature'>
+                                &mdash; Yes, I was {this.props.mindState}
+                            </span>
+                        )}
+                    </section>
 
-                    <Counter points={this.props.points} storyID={this.props.storyID} />
+                    <section className='story__footer'>
+                        <Counter points={this.props.points} storyID={this.props.storyID} />
 
-                    <button className='story__comment-toggle' onClick={this.toggleComments}>
-                        {this.state.shouldCommentsShow ? 'Hide ' : 'Show '} 
-                        Comments 
-                        ({this.state.comments.length})
-                    </button>
+                        <a className='story__comment-toggle' onClick={this.toggleComments}>
+                            {this.state.shouldCommentsShow ? 'Hide ' : 'Show '} 
+                            Comments 
+                            ({this.state.comments.length})
+                        </a>
+                    </section>
                 </div>
 
                 {this.state.comments.length > 0 && (

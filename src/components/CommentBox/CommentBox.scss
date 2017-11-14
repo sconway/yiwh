@@ -9,13 +9,13 @@
   transition: max-height 325ms ease-in-out;
 
   .comment-box__add-comment {
+    bottom: 10px;
     font-size: 20px;
     height: 30px;
     min-height: initial;
     min-width: initial;
     position: absolute;
     right: 10px;
-    top: 10px;
     width: 30px;
 
     &:focus {
@@ -23,17 +23,9 @@
     }
   }
 
-  .comment-box__comment {  
-    font-size: 14px;
-    min-height: 60px;
-    padding: 10px 45px 10px 15px;
-  }
-
   &.error {
-    
-    .error-message {
-      color: $secondary;
-      margin-bottom: 15px;
+    .comment-box__add-comment {
+      bottom: 59px;
     }
 
     .comment-box__comment {
@@ -49,5 +41,17 @@
   &.visible {
     margin-bottom: 30px;
     max-height: 300px;
+  }
+
+  .comment-box__comment {  
+    font-size: 14px;
+    min-height: 60px;
+    padding: 10px 45px 10px 15px;
+  }
+
+  .error-message {
+    color: $secondary;
+    margin-bottom: 15px;
+    margin-top: 10px;
   }
 }

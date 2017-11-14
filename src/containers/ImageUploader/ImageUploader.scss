@@ -1,15 +1,6 @@
 @import '../../global/scss/variables.scss';
 
 // Spinner based on https://codepen.io/jczimm/pen/vEBpoL
-$green: #008744;
-$blue: #0057e7;
-$red: #d62d20;
-$yellow: #ffa700;
-$white: #eee;
-
-// scaling used for loading spinner
-$width: 100px;
-
 .image-uploader {
   margin-bottom: 15px;
   position: relative;
@@ -17,7 +8,7 @@ $width: 100px;
   .image-uploader__close {
     position: absolute;
     right: 30px;
-    top: 20px;
+    top: 0;
     transform: rotate(45deg);
 
     .image-uploader__close__x {
@@ -67,7 +58,7 @@ $width: 100px;
   .image-uploader__loader {
     position: relative;
     margin: 15px auto;
-    width: $width;
+    width: $spinner-width;
 
     &:before {
       content: '';
@@ -99,7 +90,7 @@ $width: 100px;
   .image-uploader__preview {
     display: block;
     height: auto;
-    margin: 0 auto;
+    margin: 20px auto 15px;
     max-width: 50%;
     opacity: 0;
     transition: opacity 500ms ease-in-out;
@@ -135,16 +126,16 @@ $width: 100px;
 @keyframes color {
   100%,
   0% {
-    stroke: $red;
+    stroke: $spinner-red;
   }
   40% {
-    stroke: $blue;
+    stroke: $spinner-blue;
   }
   66% {
-    stroke: $green;
+    stroke: $spinner-green;
   }
   80%,
   90% {
-    stroke: $yellow;
+    stroke: $spinner-yellow;
   }
 }

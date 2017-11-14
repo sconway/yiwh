@@ -7,48 +7,94 @@ import RadioButtons from 'components/RadioButtons/RadioButtons';
 import Spinner from 'components/Spinner/Spinner';
 import './StoryBox.scss';
 
-const StoryBox = (props) => {
-    const errorMessage = "Stories must be at least 10 characters, without any special characters (%, <, *, &, etc.)";
-    const storyBoxClasses = classNames('story-box', {
-        'error': props.shouldErrorMessageShow,
-        'has-image': props.storyImage,
-        'invalid': !props.isValidStory,
-        'is-posting': props.isPosting,
-        'visible': props.shouldStoryBoxShow
-    });
+export default class StoryBox extends Component {
+    constructor(props) {
+        super(props);
 
-    return (
-        <section>
-            <button className='story-box__toggle' onClick={props.handleStoryBoxToggle} >
-                Tell us a story
-            </button>
+        this.state = {
+            isOffline: false
+        };
+    }
 
-            <div className={storyBoxClasses}>
-                <DebounceInput
-                    className='story-box__story'
-                    debounceTimeout={500}
-                    defaultValue={props.story}
-                    element='textarea'
-                    name='story' 
-                    type='text'
-                    onChange={props.updateStory}
-                    placeholder='Tell us a funny story...' 
-                    value={props.story}
-                />
+    componentDidMount() {
+        window.addEventListener('online', this.handleOnline, false);
+    }
 
-                {props.shouldErrorMessageShow && <p className='error-message'>{errorMessage}</p>}
+    componentWillUnmount() {
+        // Remove the event listener when we leave this page/component.
+        window.removeEventListener('online', this.handleOnline, false);
+    }
 
-                <RadioButtons handleRadioButtonSelection={props.handleRadioButtonSelection} />
+    /**
+     * Called when the device goes back online. Sets the state
+     * to reflect this, if it has not already.
+     */
+    handleOnline = () => {
+        console.log('back online');
+        if (this.state.isOffline) this.setState({ isOffline: false });
+    }
 
-                <ImageUploader updateStoryImage={props.updateStoryImage} />
+    /**
+     * Called when the submit button is clicked. Displays an message if
+     * there is no connection, or invokes the callback to validate the story.
+     */
+    onSubmit = () => {
+        console.log('submitting: ', navigator.onLine);
+        if (!navigator.onLine) {
+            this.setState({ isOffline: true });
+        } else {
+            this.props.validateStory();
+        }
+    }
 
-                <button className='story-box__submit' onClick={props.validateStory} >
-                    <Spinner />
-                    Submit
+    render() {
+        const connectionErrorMessage = 'There doesn\'t appear to be an Internet connection :(';
+        const errorMessage = 'Stories must be at least 10 characters, without any special characters (%, <, *, &, etc.)';
+        const storyBoxClasses = classNames('story-box', {
+            'error': this.props.shouldErrorMessageShow,
+            'has-image': this.props.storyImage,
+            'invalid': !this.props.isValidStory,
+            'is-posting': this.props.isPosting,
+            'visible': this.props.shouldStoryBoxShow
+        });
+
+        return (
+            <section>
+                <button className='story-box__toggle' onClick={this.props.handleStoryBoxToggle} >
+                    Tell us a story
                 </button>
-            </div>
-        </section>
-    );
-};
 
-export default StoryBox;
+                <div className={storyBoxClasses}>
+                    <DebounceInput
+                        className='story-box__story'
+                        debounceTimeout={500}
+                        defaultValue={this.props.story}
+                        element='textarea'
+                        name='story' 
+                        type='text'
+                        onChange={this.props.updateStory}
+                        placeholder='Tell us a funny story...' 
+                        value={this.props.story}
+                    />
+
+                    {this.props.shouldErrorMessageShow && <p className='error-message'>{errorMessage}</p>}
+
+
+                    <RadioButtons 
+                        handleRadioButtonSelection={this.props.handleRadioButtonSelection} 
+                        mindState={this.props.mindState}
+                    />
+
+                    <ImageUploader updateStoryImage={this.props.updateStoryImage} />
+
+                    {this.state.isOffline && <p className='error-message'>{connectionErrorMessage}</p>}
+
+                    <button className='story-box__submit' onClick={this.onSubmit} >
+                        <Spinner />
+                        Submit
+                    </button>
+                </div>
+            </section>
+        );
+    }
+}

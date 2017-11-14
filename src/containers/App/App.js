@@ -5,9 +5,11 @@ import Drawer from 'components/Drawer/Drawer';
 import Header from 'containers/Header/Header';
 import Footer from 'components/Footer/Footer';
 import Message from 'components/Message/Message';
+import ScrollButton from 'components/ScrollButton/ScrollButton';
+import Spinner from 'components/Spinner/Spinner';
 import StoryBox from 'components/StoryBox/StoryBox';
 import StoryList from 'components/StoryList/StoryList';
-import { defaultDate } from 'global/js/helpers';
+import { defaultDate, throttle } from 'global/js/helpers';
 import { url } from 'global/js/config.js';
 import 'global/js/material';
 import 'global/scss/reset.scss';
@@ -16,28 +18,45 @@ import './App.scss';
 
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/yesiwas/upload';
 const UPLOAD_PRESET = 'yesiwas';
+const RESULT_INCREMENTER = 5;
 
 export default class App extends Component {
     constructor(props) {
         super(props);
+
+        this.storyCount = 0;
         
         this.state = {
             filteredStories: [],
+            isFetching: false,
             isFetched: false,
             isPosted: false,
             isPosting: false,
             isValidStory: false,
             mindState: 'neither',
+            shouldScrollButtonBeVisible: false,
             shouldErrorMessageShow: false,
             shouldStoryboxShow: false,
             story: '',
+            storyIndexLower: 0,
+            storyIndexUpper: RESULT_INCREMENTER,
             stories: [],
             storyImage: null
         };
     }
 
     componentDidMount() {
+        const scrollContainer = document.querySelector('.mdl-layout__content');
+
         this.fetchStories();
+        scrollContainer.addEventListener('scroll', this.handleScroll, false);
+    }
+
+    componentWillUnmount() {
+        const scrollContainer = document.querySelector('.mdl-layout__content');
+
+        // Remove the event listener when we leave this page/component.
+        scrollContainer.removeEventListener('scroll', this.handleScroll, false);
     }
 
     /**
@@ -49,12 +68,12 @@ export default class App extends Component {
     addStory = (newStory) => {
         this.setState((prevState) => {
             return {
-                filteredStories: [...prevState.filteredStories, newStory],
+                filteredStories: [newStory, ...prevState.filteredStories],
                 isPosted: true,
                 isPosting: false,
                 isValidStory: false,
                 mindState: 'neither',
-                stories: [...prevState.stories, newStory],
+                stories: [newStory, ...prevState.stories],
                 story: ''
             };
         });
@@ -64,15 +83,27 @@ export default class App extends Component {
      * Fetches the stories from our mongo collection.
      */
     fetchStories = () => {
-        fetch('/stories')
+        this.setState({ isFetching: true });
+
+        // Creates the request for the new list of stories.
+        fetch(`/stories/${this.state.storyIndexLower}/${this.state.storyIndexUpper}`)
         .then((response) => {
-            if (response.ok) return response.json()
+            if (response.ok) {
+                return response.json()
+            }
         })
         .then((results) => {
-            this.setState({
-                filteredStories: results,
-                isFetched: true,
-                stories: results
+            this.storyCount = results.count;
+            
+            this.setState((prevState) => {
+                return {
+                    filteredStories: prevState.filteredStories.concat(results.stories),
+                    isFetched: true,
+                    isFetching: false,
+                    stories: prevState.stories.concat(results.stories),
+                    storyIndexLower: prevState.storyIndexLower + RESULT_INCREMENTER,
+                    storyIndexUpper: prevState.storyIndexUpper + RESULT_INCREMENTER
+                };
             });
         })
         .catch((err) => {
@@ -87,8 +118,33 @@ export default class App extends Component {
      * @param     {String : value}
      */
     handleRadioButtonSelection = (value) => {
+        console.log('value: ', value);
         this.setState({ mindState: value });
     }
+
+    /**
+     * Called whenever there is a scroll event. Throttles the event and
+     * checks to see if we are at the bottom of the page before loading
+     * more stories.
+     */
+    handleScroll = throttle(() => {
+        const scrollOffset = document.querySelector('.mdl-layout__content').scrollTop;
+        const documentHeight = document.querySelector('.mdl-layout__content > .wrapper').offsetHeight;
+        const scrollDistance = scrollOffset + window.innerHeight;
+
+        if (scrollOffset > 100 && !this.state.shouldScrollButtonBeVisible) {
+            this.setState({ shouldScrollButtonBeVisible: true });
+        } 
+
+        if (scrollOffset <= 100 && this.state.shouldScrollButtonBeVisible) {
+            this.setState({ shouldScrollButtonBeVisible: false });
+        }
+
+        if (scrollDistance > documentHeight && !this.state.isFetching &&
+            this.state.filteredStories.length < this.storyCount) {
+            this.fetchStories();
+        }
+    }, 100);
 
     /**
      * Called when the toggle text above the story box is clicked.
@@ -109,7 +165,6 @@ export default class App extends Component {
      * @param     {Object : newStory}
      */
     postData = (newStory) => {
-        console.log('posting: ', newStory);
         fetch('/stories', {
             method: 'POST',
             headers: {
@@ -154,7 +209,6 @@ export default class App extends Component {
             // to get a value that is either negative, positive, or zero.
             return dateA - dateB;
         });
-        console.log('oldest clicked: ', oldestStories);
 
         this.setState({ filteredStories: oldestStories });
     }
@@ -275,7 +329,12 @@ export default class App extends Component {
                     updateSearchTerm={this.updateSearchTerm} 
                 />
                 
-                <Drawer />
+                <Drawer 
+                    showNewest={this.showNewestStories}
+                    showLowestRated={this.showLowestRatedStories}
+                    showOldest={this.showOldestStories}
+                    showTopRated={this.showTopRatedStories}
+                />
 
                 <main className="mdl-layout__content">
                     {this.state.isPosted && <Message />}
@@ -292,6 +351,7 @@ export default class App extends Component {
                                         isPosting={this.state.isPosting}
                                         isPosted={this.state.isPosted}
                                         isValidStory={this.state.isValidStory}
+                                        mindState={this.state.mindState}
                                         shouldErrorMessageShow={this.state.shouldErrorMessageShow}
                                         shouldStoryBoxShow={this.state.shouldStoryboxShow}
                                         story={this.state.story}
@@ -303,6 +363,10 @@ export default class App extends Component {
                                 )}
 
                                 <StoryList stories={this.state.filteredStories} />
+
+                                {this.state.isFetching && <Spinner />}
+
+                                <ScrollButton shouldBeVisible={this.state.shouldScrollButtonBeVisible} />
                             </div>
                         )}
                     </div>

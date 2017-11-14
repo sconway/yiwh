@@ -1,3 +1,5 @@
+@import '../../global/scss/breakpoints.scss';
+
 .story-wrapper {
   display: flex;
   flex-direction: column;
@@ -7,31 +9,55 @@
     background: #fff;
     margin-bottom: 15px;
     min-height: 100px;
-    padding: 15px 100px 45px 30px;
     position: relative;
 
+    .story__body {
+      padding: 15px 20px;
+
+      @include for-tablet-portrait-up {
+        padding: 20px 25px;
+      }
+    }
+
     .story__comment-toggle {
-      background-color: transparent;
-      border: 1px solid black;
-      bottom: 15px;
-      outline: transparent;
-      padding: 10px;
-      position: absolute;
-      right: 140px;
+      color: #fff;
+      font-size: 14px;
+
+      @include for-tablet-portrait-up {
+        font-size: 16px;
+      }
     }
 
     .story__date {
+      display: block;
       font-size: 12px;
       font-weight: 600;
-      margin-bottom: 15px;
+      margin-bottom: 5px;
       text-transform: uppercase;
+    }
+
+    .story__footer {
+      align-items: center;
+      background-color: #424242;
+      display: flex;
+      font-size: 16px;
+      justify-content: space-between;
+      padding: 10px 20px;
+
+      @include for-tablet-portrait-up {
+        padding: 10px 20px;
+      } 
     }
 
     .story__image {
       display: block;
       height: auto;
-      margin: 0 auto;
-      max-width: 50%;
+      margin: 0 auto 15px;
+      max-width: 90%;
+
+      @include for-tablet-landscape-up {
+        max-width: 50%;
+      } 
     }
 
     .story__text {
@@ -40,7 +66,11 @@
 
     .story__signature {
       display: block;
-      padding-top: 20px;
+      text-align: right;
+
+      // @include for-tablet-portrait-up {
+      //   padding-top: 20px;
+      // } 
     }
   }
 }

@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React, { PureComponent } from 'react';
 import Comment from 'components/Comment/Comment';
 import './CommentList.scss';
 

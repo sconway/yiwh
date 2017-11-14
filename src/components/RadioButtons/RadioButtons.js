@@ -13,7 +13,9 @@ const RadioButtons = (props) => {
     return (
         <div className='radio-buttons'>
             <span className='radio-buttons__text'>I was: </span>
+
             <input 
+                checked={props.mindState === 'drunk'}
                 className='radio-buttons__button' 
                 id='drunkButton' 
                 name='mindState' 
@@ -21,8 +23,13 @@ const RadioButtons = (props) => {
                 type='radio'
                 value='drunk' 
             />
-            <label className='radio-buttons__label' htmlFor='drunkButton'>Drunk</label>
-            <input 
+            
+            <label className='radio-buttons__label' htmlFor='drunkButton'>
+                Drunk
+            </label>
+
+            <input
+                checked={props.mindState === 'high'}
                 className='radio-buttons__button' 
                 id='highButton'
                 name='mindState'
@@ -30,9 +37,13 @@ const RadioButtons = (props) => {
                 type='radio' 
                 value='high'
             />
-            <label className='radio-buttons__label' htmlFor='highButton'>High</label>
+            
+            <label className='radio-buttons__label' htmlFor='highButton'>
+                High
+            </label>
+
             <input
-                checked 
+                checked={props.mindState === 'neither'} 
                 className='radio-buttons__button' 
                 id='noneButton'
                 name='mindState'
@@ -40,7 +51,10 @@ const RadioButtons = (props) => {
                 type='radio' 
                 value='neither'
             />
-            <label className='radio-buttons__label' htmlFor='noneButton'>Neither</label>
+            
+            <label className='radio-buttons__label' htmlFor='noneButton'>
+                Neither
+            </label>
         </div>
     );
 }

@@ -1,7 +1,17 @@
+@import '../../global/scss/breakpoints.scss';
+
 .mdl-mini-footer {
-  align-items: center;
   
-  .mdl-logo {
-    font-size: 14px;
+  &.footer {  
+    align-items: center;
+    display: block;
+
+    @include for-tablet-portrait-up {
+      display: flex;
+    }
+
+    .mdl-logo {
+      font-size: 14px;
+    }
   }
 }
