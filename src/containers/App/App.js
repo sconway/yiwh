@@ -88,9 +88,7 @@ export default class App extends Component {
         // Creates the request for the new list of stories.
         fetch(`/stories/${this.state.storyIndexLower}/${this.state.storyIndexUpper}`)
         .then((response) => {
-            if (response.ok) {
-                return response.json()
-            }
+            if (response.ok) return response.json();
         })
         .then((results) => {
             this.storyCount = results.count;
@@ -117,10 +115,7 @@ export default class App extends Component {
      * 
      * @param     {String : value}
      */
-    handleRadioButtonSelection = (value) => {
-        console.log('value: ', value);
-        this.setState({ mindState: value });
-    }
+    handleRadioButtonSelection = (value) => this.setState({ mindState: value });
 
     /**
      * Called whenever there is a scroll event. Throttles the event and
@@ -311,7 +306,6 @@ export default class App extends Component {
 
                     this.postData(newStory);
                 });
-
             } else {
                 this.postData(newStory);
             }

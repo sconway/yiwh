@@ -377,8 +377,8 @@ button.scroll-button {
   max-height: 0px;
   opacity: 0;
   position: relative;
-  -webkit-transition: opacity 500ms ease-in-out, max-height 250ms ease-in-out 500ms;
-  transition: opacity 500ms ease-in-out, max-height 250ms ease-in-out 500ms; }
+  -webkit-transition: opacity 500ms ease-in-out, max-height 250ms ease-in-out 500ms;
+  transition: opacity 500ms ease-in-out, max-height 250ms ease-in-out 500ms; }
   .story-box.error .story-box__story {
     border-color: #ff5252; }
     .story-box.error .story-box__story:focus {
@@ -400,8 +400,8 @@ button.scroll-button {
     margin-bottom: 45px;
     opacity: 1; }
     .story-box.visible:not(.has-image) {
-      -webkit-transition: max-height 250ms ease-in-out, opacity 500ms ease-in-out 250ms;
-      transition: max-height 250ms ease-in-out, opacity 500ms ease-in-out 250ms;
+      -webkit-transition: max-height 250ms ease-in-out, opacity 500ms ease-in-out 250ms;
+      transition: max-height 250ms ease-in-out, opacity 500ms ease-in-out 250ms;
       max-height: 500px; }
   .story-box .error-message {
     color: #ff5252;
@@ -511,8 +511,8 @@ button.scroll-button {
   max-height: 0;
   overflow: scroll;
   padding: 0 15px;
-  -webkit-transition: max-height 500ms ease-in-out, margin-bottom 500ms ease-in-out, padding-bottom 500ms ease-in-out, padding-top 500ms ease-in-out;
-  transition: max-height 500ms ease-in-out, margin-bottom 500ms ease-in-out, padding-bottom 500ms ease-in-out, padding-top 500ms ease-in-out;
+  -webkit-transition: max-height 500ms ease-in-out, margin-bottom 500ms ease-in-out, padding-bottom 500ms ease-in-out, padding-top 500ms ease-in-out;
+  transition: max-height 500ms ease-in-out, margin-bottom 500ms ease-in-out, padding-bottom 500ms ease-in-out, padding-top 500ms ease-in-out;
   width: calc(100% - 80px); }
   .comment.visible {
     max-height: 100px;

@@ -80,10 +80,9 @@ self.addEventListener('activate', function(event) {
 });
 
 
-// self.addEventListener('sync', function(event) {
-//   if (event.tag == 'myFirstSync') {
-//     console.log('Sync Occurred');
-//     // event.waitUntil();
-//   }
-// });
-
+self.addEventListener('sync', function(event) {
+  if (event.tag === 'storySync') {
+    console.log('sync happened');
+    // event.waitUntil(doSomeStuff());
+  }
+});
