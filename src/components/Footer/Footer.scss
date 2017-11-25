@@ -1,17 +1,42 @@
 @import '../../global/scss/breakpoints.scss';
 
-.mdl-mini-footer {
+footer.mdl-mini-footer {
+  bottom: 0;
+  padding: 16px;
+  position: fixed;
+  width: 100%;
   
   &.footer {  
     align-items: center;
     display: block;
+    z-index: 1;
 
     @include for-tablet-portrait-up {
       display: flex;
     }
 
+    .email-input {
+      left: -9999px;
+      opacity: 0;
+      position: absolute;
+    }
+
+    .icon {
+      margin-right: 5px;
+    }
+
     .mdl-logo {
       font-size: 14px;
+      margin-bottom: 0;
+      margin-right: 15px;
+    }
+
+    .footer__contact,
+    .mdl-mini-footer__left-section {
+      align-items: center;
+      color: #fff;
+      display: flex;
+      text-decoration: none;
     }
   }
 }

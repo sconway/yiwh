@@ -13,7 +13,7 @@ const CommentList = (props) => {
                 <Comment 
                     comment={comment.comment} 
                     date={comment.date} 
-                    index={index}
+                    key={index}
                     shouldCommentsShow={props.shouldCommentsShow}
                 />
             );

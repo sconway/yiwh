@@ -30,12 +30,16 @@
     }
 
     .counter__buttons--minus {
+        background-color: $secondary !important;
+        
         &:focus {
           background-color: $secondary !important;
         }
     }
 
     .counter__buttons--plus {
+        background-color: $primary !important;
+        
         &:focus {
           background-color: $primary !important;
         }

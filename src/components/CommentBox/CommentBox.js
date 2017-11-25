@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import root from 'window-or-global';
 import classNames from 'classnames';
 import DebounceInput from 'react-debounce-input';
 import './CommentBox.scss';
@@ -13,12 +14,12 @@ export default class CommentBox extends Component {
      }
 
      componentDidMount() {
-        window.addEventListener('online', this.handleOnline, false);
+        root.addEventListener('online', this.handleOnline, false);
      }
 
      componentWillUnmount() {
         // Remove the event listener when we leave this page/component.
-        window.removeEventListener('online', this.handleOnline, false);
+        root.removeEventListener('online', this.handleOnline, false);
      }
 
      /**
@@ -56,13 +57,11 @@ export default class CommentBox extends Component {
                     <DebounceInput
                          className='comment-box__comment'
                          debounceTimeout={500}
-                         defaultValue={this.props.comment}
                          element='textarea'
                          name='comment-box' 
                          type='text'
                          onChange={this.props.updateComment}
-                         placeholder="Leave a comment, but don't be a troll" 
-                         value={this.props.comment}
+                         placeholder="Leave a comment, but don't be a troll"
                     />
 
                     {this.props.shouldErrorMessageShow && <p className='error-message'>{errorMessage}</p>}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import request from 'superagent';
+import root from 'window-or-global';
 import Drawer from 'components/Drawer/Drawer';
 import Header from 'containers/Header/Header';
 import Footer from 'components/Footer/Footer';
@@ -10,15 +11,12 @@ import Spinner from 'components/Spinner/Spinner';
 import StoryBox from 'components/StoryBox/StoryBox';
 import StoryList from 'components/StoryList/StoryList';
 import { defaultDate, throttle } from 'global/js/helpers';
-import { url } from 'global/js/config.js';
-import 'global/js/material';
+import { url, resultIncrementer, uploadPreset, uploadURL } from 'global/js/config.js';
+// import 'global/js/material';
 import 'global/scss/reset.scss';
-import 'global/scss/material.scss';
+// import 'global/scss/material.scss';
 import './App.scss';
 
-const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/yesiwas/upload';
-const UPLOAD_PRESET = 'yesiwas';
-const RESULT_INCREMENTER = 5;
 
 export default class App extends Component {
     constructor(props) {
@@ -39,7 +37,7 @@ export default class App extends Component {
             shouldStoryboxShow: false,
             story: '',
             storyIndexLower: 0,
-            storyIndexUpper: RESULT_INCREMENTER,
+            storyIndexUpper: resultIncrementer,
             stories: [],
             storyImage: null
         };
@@ -101,8 +99,8 @@ export default class App extends Component {
                     isFetched: true,
                     isFetching: false,
                     stories: prevState.stories.concat(results.stories),
-                    storyIndexLower: prevState.storyIndexLower + RESULT_INCREMENTER,
-                    storyIndexUpper: prevState.storyIndexUpper + RESULT_INCREMENTER
+                    storyIndexLower: prevState.storyIndexLower + resultIncrementer,
+                    storyIndexUpper: prevState.storyIndexUpper + resultIncrementer
                 };
             });
         })
@@ -130,7 +128,7 @@ export default class App extends Component {
     handleScroll = throttle(() => {
         const scrollOffset = document.querySelector('.mdl-layout__content').scrollTop;
         const documentHeight = document.querySelector('.mdl-layout__content > .wrapper').offsetHeight;
-        const scrollDistance = scrollOffset + window.innerHeight;
+        const scrollDistance = scrollOffset + root.innerHeight;
 
         if (scrollOffset > 100 && !this.state.shouldScrollButtonBeVisible) {
             this.setState({ shouldScrollButtonBeVisible: true });
@@ -278,6 +276,45 @@ export default class App extends Component {
     }
 
     /**
+     * Called for stories that have an image uploaded with them. Uploads
+     * the image to cloudinary before posting the story to the server.
+     *
+     * @param {Object} newStory
+     */
+    uploadAndPost = (newStory) => {
+        let upload = request.post(uploadURL)
+             .field('upload_preset', uploadPreset)
+             .field('file', this.state.storyImage);
+
+        upload.end((err, response) => {
+            if (err) console.error(err);
+
+            // If we got a good response, update new story with
+            // the url for the image to be used later.
+            if (response.body.secure_url !== '')
+                newStory.storyImageUrl = response.body.secure_url;
+
+            this.postData(newStory);
+        });
+
+
+        // fetch('/stories', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(newStory)
+        // })
+        // .then((response) => {
+        //     if (response.ok) this.addStory(newStory);
+        // })
+        // .catch((err) => {
+        //     console.log('Error Posting: ', err);
+        // });
+    }
+
+    /**
      * Makes sure that a valid story was entered.
      */
     validateStory = () => {
@@ -294,27 +331,8 @@ export default class App extends Component {
         if (this.state.isValidStory) {
             // Set the state to display the loading spinner.
             this.setState({ isPosting: true });
-
             // If there is a story image upload it before posting the story
-            if (this.state.storyImage) {
-                let upload = request.post(CLOUDINARY_UPLOAD_URL)
-                     .field('upload_preset', UPLOAD_PRESET)
-                     .field('file', this.state.storyImage);
-
-                upload.end((err, response) => {
-                    if (err) console.error(err);
-
-                    // If we got a good response, update new story with
-                    // the url for the image to be used later.
-                    if (response.body.secure_url !== '')
-                        newStory.storyImageUrl = response.body.secure_url;
-
-                    this.postData(newStory);
-                });
-
-            } else {
-                this.postData(newStory);
-            }
+            this.state.storyImage ? this.uploadAndPost(newStory) : this.postData(newStory);
         }
     }
 
@@ -354,7 +372,6 @@ export default class App extends Component {
                                         mindState={this.state.mindState}
                                         shouldErrorMessageShow={this.state.shouldErrorMessageShow}
                                         shouldStoryBoxShow={this.state.shouldStoryboxShow}
-                                        story={this.state.story}
                                         storyImage={this.state.storyImage}
                                         updateStory={this.updateStory}
                                         updateStoryImage={this.updateStoryImage}

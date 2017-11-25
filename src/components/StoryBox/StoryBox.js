@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import root from 'window-or-global'
 import classNames from 'classnames';
 import DebounceInput from 'react-debounce-input';
 import ImageUploader from 'containers/ImageUploader/ImageUploader';
@@ -17,12 +18,12 @@ export default class StoryBox extends Component {
     }
 
     componentDidMount() {
-        window.addEventListener('online', this.handleOnline, false);
+        root.addEventListener('online', this.handleOnline, false);
     }
 
     componentWillUnmount() {
         // Remove the event listener when we leave this page/component.
-        window.removeEventListener('online', this.handleOnline, false);
+        root.removeEventListener('online', this.handleOnline, false);
     }
 
     /**
@@ -30,7 +31,6 @@ export default class StoryBox extends Component {
      * to reflect this, if it has not already.
      */
     handleOnline = () => {
-        console.log('back online');
         if (this.state.isOffline) this.setState({ isOffline: false });
     }
 
@@ -39,12 +39,7 @@ export default class StoryBox extends Component {
      * there is no connection, or invokes the callback to validate the story.
      */
     onSubmit = () => {
-        console.log('submitting: ', navigator.onLine);
-        if (!navigator.onLine) {
-            this.setState({ isOffline: true });
-        } else {
-            this.props.validateStory();
-        }
+        navigator.onLine ? this.props.validateStory() : this.setState({ isOffline: true });
     }
 
     render() {
@@ -68,17 +63,14 @@ export default class StoryBox extends Component {
                     <DebounceInput
                         className='story-box__story'
                         debounceTimeout={500}
-                        defaultValue={this.props.story}
                         element='textarea'
                         name='story' 
                         type='text'
                         onChange={this.props.updateStory}
-                        placeholder='Tell us a funny story...' 
-                        value={this.props.story}
+                        placeholder='Tell us a funny story...'
                     />
 
                     {this.props.shouldErrorMessageShow && <p className='error-message'>{errorMessage}</p>}
-
 
                     <RadioButtons 
                         handleRadioButtonSelection={this.props.handleRadioButtonSelection} 
@@ -90,8 +82,7 @@ export default class StoryBox extends Component {
                     {this.state.isOffline && <p className='error-message'>{connectionErrorMessage}</p>}
 
                     <button className='story-box__submit' onClick={this.onSubmit} >
-                        <Spinner />
-                        Submit
+                        <Spinner /> Submit
                     </button>
                 </div>
             </section>

@@ -12,7 +12,7 @@ const Comment = (props) => {
     });
 
     return (
-        <li className={commentClasses} key={props.index}>
+        <li className={commentClasses}>
             <span className='comment__date'>{formattedDate}</span>
             <p className='comment__text'>{props.comment}</p>
         </li>

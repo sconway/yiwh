@@ -3,14 +3,30 @@ import ReactDOM from 'react-dom';
 import './Footer.scss';
 
 const Footer = () => {
+    /**
+     * Called when the contact button is clicked. Copies the contact
+     * email to the clipboard for later use.
+     */
+    const handleClick = (e) => {
+        e.preventDefault();
+
+        document.getElementById('emailText').select();
+        document.execCommand('copy');
+        alert('email address copied to clipboard');
+    };
+
     return (
-        <footer className="footer mdl-mini-footer">
-            <div className="mdl-mini-footer__left-section">
-                <div className="mdl-logo">Yes, I was... &copy; 2017</div>
-                <ul className="mdl-mini-footer__link-list">
-                    <li><a href="#">Help</a></li>
-                    <li><a href="#">Privacy & Terms</a></li>
-                </ul>
+        <footer className='footer mdl-mini-footer'>
+            <div className='mdl-mini-footer__left-section'>
+                <div className='mdl-logo'>Yes, I was... &copy; 2017</div>
+                <a href='' className='footer__contact' id='tooltip' onClick={handleClick}>
+                    <span className='icon material-icons'>email</span>
+                    Contact
+                </a>
+                <div className='mdl-tooltip mdl-tooltip--large mdl-tooltip--top' htmlFor='tooltip'>
+                    yesiwas@gmail.com
+                </div>
+                <input className='email-input' defaultValue='yesiwas@gmail.com' id='emailText' type='text' />
             </div>
         </footer>
     );
