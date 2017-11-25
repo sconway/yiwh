@@ -28907,12 +28907,6 @@ exports.push([module.i, ".story-list {\n  margin-bottom: 30px; }\n", ""]);
 "use strict";
 
 
-// export const connectionString = 'mongodb://sconway:Sc0nway$co586@ds023523.mlab.com:23523/yesiwashigh';
-// export const url = 'CLOUDINARY_URL=cloudinary://358745272282758:SwNIYhNLfRkTAUNoIo9nd8kkolc@yesiwas';
-// export const resultIncrementer = 5;
-// export const uploadPreset = 'yesiwas';
-// export const uploadURL = 'https://api.cloudinary.com/v1_1/yesiwas/upload';
-
 module.exports = {
   connectionString: 'mongodb://sconway:Sc0nway$co586@ds023523.mlab.com:23523/yesiwashigh',
   url: 'CLOUDINARY_URL=cloudinary://358745272282758:SwNIYhNLfRkTAUNoIo9nd8kkolc@yesiwas',
