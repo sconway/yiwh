@@ -3,7 +3,7 @@
 
 button.scroll-button {
   background-color: $primary !important;
-  bottom: 25px;
+  bottom: 50px;
   opacity: 0;
   pointer-events: none;
   position: fixed;
@@ -14,6 +14,11 @@ button.scroll-button {
   @include for-tablet-portrait-up {
     bottom: 60px;
     right: 40px;
+  }
+
+  @include for-tablet-landscape-up {
+    bottom: 80px;
+    right: calc(50% - 992px/2 - 75px);
   }
 
   &.visible {

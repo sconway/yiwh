@@ -1,9 +1,8 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import Comment from 'components/Comment/Comment';
 import './CommentList.scss';
 
 const CommentList = (props) => {
-    console.log('comments: ', props.comments);
     /**
      * Constructs the list of stories
      */

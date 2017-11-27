@@ -13,7 +13,7 @@ const StoryList = (props) => {
                 <Story
                     comments={story.comments}
                     date={story.date}
-                    key={index}
+                    key={story._id + index}
                     mindState={story.mindState}
                     points={story.points}
                     story={story.story} 

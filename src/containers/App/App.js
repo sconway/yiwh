@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import request from 'superagent';
 import root from 'window-or-global';
 import Drawer from 'components/Drawer/Drawer';
-import Header from 'containers/Header/Header';
+import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import Message from 'components/Message/Message';
 import ScrollButton from 'components/ScrollButton/ScrollButton';
@@ -12,9 +12,7 @@ import StoryBox from 'components/StoryBox/StoryBox';
 import StoryList from 'components/StoryList/StoryList';
 import { defaultDate, throttle } from 'global/js/helpers';
 import { url, resultIncrementer, uploadPreset, uploadURL } from 'global/js/config.js';
-// import 'global/js/material';
 import 'global/scss/reset.scss';
-// import 'global/scss/material.scss';
 import './App.scss';
 
 
@@ -110,13 +108,47 @@ export default class App extends Component {
     }
 
     /**
+     * Filters the stories by date, in ascending or decending
+     * order depending on the supplied arguments.
+     * 
+     * @param     {Integer} : order
+     */
+    filterStoriesByDate = (order) => {
+        const newStories = this.state.filteredStories.sort((a,b) => {
+            const dateA = a.date || defaultDate;
+            const dateB = b.date || defaultDate;
+
+            // Turn your strings into dates, and then subtract them
+            // to get a value that is either negative, positive, or zero.
+            return order > 0 ? dateB - dateA : dateA - dateB;
+        });
+
+        this.setState({ filteredStories: newStories });
+    }
+
+    /**
+     * Filters the stories based on the supplied argument
+     * (-1 acending, 1 decending).
+     *
+     * @param {Integer} : order
+     */
+    filterStoriesByRating = (order) => {
+        const newStories = this.state.filteredStories.sort((a,b) => {
+            // Turn your strings into dates, and then subtract them
+            // to get a value that is either negative, positive, or zero.
+            return order > 0 ?  b.points - a.points : a.points - b.points;
+        });
+
+        this.setState({ filteredStories: newStories });
+    }
+
+    /**
      * Called when a radio button option for the mental state
      * radio buttons is selected. Sets the state with the value. 
      * 
      * @param     {String : value}
      */
     handleRadioButtonSelection = (value) => {
-        console.log('value: ', value);
         this.setState({ mindState: value });
     }
 
@@ -160,7 +192,7 @@ export default class App extends Component {
      * Constructs the story based on the current values and
      * posts our form data to the server.
      *
-     * @param     {Object : newStory}
+     * @param     {Object} : newStory
      */
     postData = (newStory) => {
         fetch('/stories', {
@@ -177,64 +209,6 @@ export default class App extends Component {
         .catch((err) => {
             console.log('Error Posting: ', err);
         });
-    }
-
-    /**
-     * Displays the stories, showing the newest ones first.
-     */
-    showNewestStories = () => {
-        const newestStories = this.state.filteredStories.sort((a,b) => {
-            const dateA = a.date || defaultDate;
-            const dateB = b.date || defaultDate;
-
-            // Turn your strings into dates, and then subtract them
-            // to get a value that is either negative, positive, or zero.
-            return dateB - dateA;
-        });
-
-        this.setState({ filteredStories: newestStories });
-    }
-
-    /**
-     * Displays the stories, showing the oldest ones first.
-     */
-    showOldestStories = () => {
-        const oldestStories = this.state.filteredStories.sort((a,b) => {
-            const dateA = a.date || defaultDate;
-            const dateB = b.date || defaultDate;
-
-            // Turn your strings into dates, and then subtract them
-            // to get a value that is either negative, positive, or zero.
-            return dateA - dateB;
-        });
-
-        this.setState({ filteredStories: oldestStories });
-    }
-
-    /**
-     * Displays the stories, showing the lowest rated ones first.
-     */
-    showLowestRatedStories = () => {
-        const lowestRatedStories = this.state.filteredStories.sort((a,b) => {
-            // Turn your strings into dates, and then subtract them
-            // to get a value that is either negative, positive, or zero.
-            return a.points - b.points;
-        });
-
-        this.setState({ filteredStories: lowestRatedStories });
-    }
-
-    /**
-     * Displays the stories, showing the top rated ones first.
-     */
-    showTopRatedStories = () => {
-        const topRatedStories = this.state.filteredStories.sort((a,b) => {
-            // Turn your strings into dates, and then subtract them
-            // to get a value that is either negative, positive, or zero.
-            return b.points - a.points;
-        });
-
-        this.setState({ filteredStories: topRatedStories });
     }
 
     /**
@@ -296,22 +270,6 @@ export default class App extends Component {
 
             this.postData(newStory);
         });
-
-
-        // fetch('/stories', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(newStory)
-        // })
-        // .then((response) => {
-        //     if (response.ok) this.addStory(newStory);
-        // })
-        // .catch((err) => {
-        //     console.log('Error Posting: ', err);
-        // });
     }
 
     /**
@@ -340,18 +298,14 @@ export default class App extends Component {
         return (
             <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
                 <Header 
-                    showNewest={this.showNewestStories}
-                    showLowestRated={this.showLowestRatedStories}
-                    showOldest={this.showOldestStories}
-                    showTopRated={this.showTopRatedStories}
+                    filterByDate={this.filterStoriesByDate}
+                    filterByRating={this.filterStoriesByRating}
                     updateSearchTerm={this.updateSearchTerm} 
                 />
                 
                 <Drawer 
-                    showNewest={this.showNewestStories}
-                    showLowestRated={this.showLowestRatedStories}
-                    showOldest={this.showOldestStories}
-                    showTopRated={this.showTopRatedStories}
+                    filterByDate={this.filterStoriesByDate}
+                    filterByRating={this.filterStoriesByRating}
                 />
 
                 <main className="mdl-layout__content">
