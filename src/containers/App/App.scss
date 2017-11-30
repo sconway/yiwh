@@ -27,10 +27,11 @@ button {
   margin: 0 auto;
   max-width: 992px;
   padding-bottom: 68px;
-  padding-top: 40px;
+  padding-top: 20px;
   width: 92%;
 
   @include for-tablet-portrait-up {
+    padding-top: 40px;
     width: 80%;
   } 
 

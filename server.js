@@ -4,7 +4,6 @@ const path = require('path');
 const requireFromString = require('require-from-string');
 const MemoryFS = require('memory-fs');
 const serverConfig = require('./config/server.production.js');
-const connectionString = require('./src/global/js/config.js').connectionString;
 const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
@@ -34,7 +33,7 @@ const outputErrors = (err, stats) => {
 
   if (stats.hasErrors()) console.error(info.errors);
   if (stats.hasWarnings()) console.warn(info.warnings);
-};
+}
 
 /**
  * Connects to the mondgo DB and listens for requests.
@@ -42,7 +41,7 @@ const outputErrors = (err, stats) => {
 const connectToDb = () => {
   // Use the connection string to connect to the Database and
   // setup the listener on the defined port.
-  MongoClient.connect(connectionString, (err, database) => {
+  MongoClient.connect(process.env.connectionString, (err, database) => {
     if (err) {
       console.log('MONGO CONNECTION ERROR: ', err);
       return;
@@ -161,20 +160,18 @@ const initServerOptions = () => {
     delayMs: 0 // disable delaying - full speed until the max limit is reached 
   });
 
-  // Enable for live
   expressApp.enable('trust proxy');
-  // Middleware to allow us to set a base directory and read
-  // data being sent over in the req/res parameters.
   expressApp.use(express.static(path.join(__dirname)));
   expressApp.use(bodyParser.json());
   expressApp.use(bodyParser.urlencoded({extended: true}));
+  expressApp.use(limiter);
+  // expressApp.use(helmet());
   expressApp.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "https://yesiwas.herokuapp.com");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
   });
-  // expressApp.use(helmet());
-  expressApp.use(limiter);
+
   // Handles default connections.
   expressApp.get('/', appInMemory.default);
 }

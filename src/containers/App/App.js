@@ -11,14 +11,11 @@ import Spinner from 'components/Spinner/Spinner';
 import StoryBox from 'components/StoryBox/StoryBox';
 import StoryList from 'components/StoryList/StoryList';
 import { defaultDate, throttle } from 'global/js/helpers';
-import { url, uploadURL } from 'global/js/config.js';
+// import { url, uploadURL } from 'global/js/config.js';
 import 'global/scss/reset.scss';
 import './App.scss';
 const uploadPreset = 'yesiwas';
 const RESULT_INCREMENTER = 5;
-
-console.log('url: ', process.env.uploadURL);
-
 
 export default class App extends Component {
     constructor(props) {
@@ -260,7 +257,7 @@ export default class App extends Component {
      * @param {Object} newStory
      */
     uploadAndPost = (newStory) => {
-        let upload = request.post(uploadURL)
+        let upload = request.post(process.env.uploadURL)
              .field('upload_preset', uploadPreset)
              .field('file', this.state.storyImage);
 

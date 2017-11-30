@@ -10840,7 +10840,7 @@ var _App = __webpack_require__(193);
 
 var _App2 = _interopRequireDefault(_App);
 
-var _registerServiceWorker = __webpack_require__(256);
+var _registerServiceWorker = __webpack_require__(255);
 
 var _registerServiceWorker2 = _interopRequireDefault(_registerServiceWorker);
 
@@ -22816,11 +22816,9 @@ var _StoryList2 = _interopRequireDefault(_StoryList);
 
 var _helpers = __webpack_require__(56);
 
-var _config = __webpack_require__(251);
+__webpack_require__(251);
 
-__webpack_require__(252);
-
-__webpack_require__(254);
+__webpack_require__(253);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22831,6 +22829,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+// import { url, uploadURL } from 'global/js/config.js';
+
 
 var uploadPreset = 'yesiwas';
 var RESULT_INCREMENTER = 5;
@@ -22979,7 +22979,7 @@ var App = function (_Component) {
         };
 
         _this.uploadAndPost = function (newStory) {
-            var upload = _superagent2.default.post(_config.uploadURL).field('upload_preset', uploadPreset).field('file', _this.state.storyImage);
+            var upload = _superagent2.default.post(process.env.uploadURL).field('upload_preset', uploadPreset).field('file', _this.state.storyImage);
 
             upload.end(function (err, response) {
                 if (err) console.error(err);
@@ -27880,7 +27880,7 @@ exports = module.exports = __webpack_require__(8)(undefined);
 
 
 // module
-exports.push([module.i, ".story-box {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: column;\n          flex-direction: column;\n  max-height: 0px;\n  opacity: 0;\n  position: relative;\n  -webkit-transition: opacity 500ms ease-in-out, max-height 250ms ease-in-out 500ms;\n  transition: opacity 500ms ease-in-out, max-height 250ms ease-in-out 500ms; }\n  .story-box.error .story-box__story {\n    border-color: #ff5252; }\n    .story-box.error .story-box__story:focus {\n      border-color: #ff5252 !important; }\n  .story-box.has-image {\n    max-height: initial; }\n    .story-box.has-image:not(.visible) {\n      -webkit-transition: none;\n      transition: none;\n      max-height: 0; }\n  .story-box.invalid .story-box__story:focus {\n    border-color: #f1a83d; }\n  .story-box.invalid .story-box__submit {\n    opacity: 0.3;\n    pointer-events: none; }\n  .story-box.is-posting .spinner {\n    display: block; }\n  .story-box.visible {\n    margin-bottom: 45px;\n    opacity: 1; }\n    .story-box.visible:not(.has-image) {\n      -webkit-transition: max-height 250ms ease-in-out, opacity 500ms ease-in-out 250ms;\n      transition: max-height 250ms ease-in-out, opacity 500ms ease-in-out 250ms;\n      max-height: 500px; }\n  .story-box .error-message {\n    color: #ff5252;\n    margin-bottom: 15px; }\n  .story-box .spinner {\n    display: none; }\n  .story-box .story-box__story {\n    border: 1px solid #000;\n    font-size: 18px;\n    height: 100px;\n    margin-bottom: 15px;\n    outline: 0;\n    padding: 15px;\n    -webkit-transition: border-color 500ms ease-in-out;\n    transition: border-color 500ms ease-in-out;\n    z-index: 1; }\n    .story-box .story-box__story:focus {\n      border-color: #4caf50; }\n  .story-box .story-box__submit {\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -ms-flex-item-align: end;\n        align-self: flex-end;\n    background-color: transparent;\n    border: 1px solid #000;\n    border-radius: 0;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    font-size: 18px;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    outline: none;\n    padding: 15px;\n    -webkit-transition: opacity 500ms ease-in-out;\n    transition: opacity 500ms ease-in-out;\n    width: 150px;\n    z-index: 1; }\n    .story-box .story-box__submit .spinner {\n      margin: 0 15px 0 0;\n      padding: 0;\n      width: 25px; }\n\n.story-box__toggle {\n  background-color: #4caf50;\n  border: none;\n  border-radius: 0;\n  font-size: 18px;\n  margin-bottom: 20px;\n  outline: 0;\n  padding: 15px;\n  text-align: center;\n  -webkit-transition: background-color 300ms ease-in-out;\n  transition: background-color 300ms ease-in-out;\n  width: 100%; }\n  .story-box__toggle:hover {\n    background-color: #2d682f; }\n", ""]);
+exports.push([module.i, ".story-box {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: column;\n          flex-direction: column;\n  max-height: 0px;\n  opacity: 0;\n  position: relative;\n  -webkit-transition: opacity 500ms ease-in-out,\r max-height 250ms ease-in-out 500ms;\n  transition: opacity 500ms ease-in-out,\r max-height 250ms ease-in-out 500ms; }\n  .story-box.error .story-box__story {\n    border-color: #ff5252; }\n    .story-box.error .story-box__story:focus {\n      border-color: #ff5252 !important; }\n  .story-box.has-image {\n    max-height: initial; }\n    .story-box.has-image:not(.visible) {\n      -webkit-transition: none;\n      transition: none;\n      max-height: 0; }\n  .story-box.invalid .story-box__story:focus {\n    border-color: #f1a83d; }\n  .story-box.invalid .story-box__submit {\n    opacity: 0.3;\n    pointer-events: none; }\n  .story-box.is-posting .spinner {\n    display: block; }\n  .story-box.visible {\n    margin-bottom: 45px;\n    opacity: 1; }\n    .story-box.visible:not(.has-image) {\n      -webkit-transition: max-height 250ms ease-in-out,\r opacity 500ms ease-in-out 250ms;\n      transition: max-height 250ms ease-in-out,\r opacity 500ms ease-in-out 250ms;\n      max-height: 500px; }\n  .story-box .error-message {\n    color: #ff5252;\n    margin-bottom: 15px; }\n  .story-box .spinner {\n    display: none; }\n  .story-box .story-box__story {\n    border: 1px solid #000;\n    font-size: 18px;\n    height: 100px;\n    margin-bottom: 15px;\n    outline: 0;\n    padding: 15px;\n    -webkit-transition: border-color 500ms ease-in-out;\n    transition: border-color 500ms ease-in-out;\n    z-index: 1; }\n    .story-box .story-box__story:focus {\n      border-color: #4caf50; }\n  .story-box .story-box__submit {\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -ms-flex-item-align: end;\n        align-self: flex-end;\n    background-color: transparent;\n    border: 1px solid #000;\n    border-radius: 0;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    font-size: 18px;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    outline: none;\n    padding: 15px;\n    -webkit-transition: opacity 500ms ease-in-out;\n    transition: opacity 500ms ease-in-out;\n    width: 150px;\n    z-index: 1; }\n    .story-box .story-box__submit .spinner {\n      margin: 0 15px 0 0;\n      padding: 0;\n      width: 25px; }\n\n.story-box__toggle {\n  background-color: #4caf50;\n  border: none;\n  border-radius: 0;\n  font-size: 18px;\n  margin-bottom: 20px;\n  outline: 0;\n  padding: 15px;\n  text-align: center;\n  -webkit-transition: background-color 300ms ease-in-out;\n  transition: background-color 300ms ease-in-out;\n  width: 100%; }\n  .story-box__toggle:hover {\n    background-color: #2d682f; }\n", ""]);
 
 // exports
 
@@ -28535,7 +28535,7 @@ exports = module.exports = __webpack_require__(8)(undefined);
 
 
 // module
-exports.push([module.i, ".comment {\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n  background-color: #fff;\n  line-height: 1.3;\n  max-height: 0;\n  overflow: scroll;\n  padding: 0 15px;\n  -webkit-transition: max-height 500ms ease-in-out, margin-bottom 500ms ease-in-out, padding-bottom 500ms ease-in-out, padding-top 500ms ease-in-out;\n  transition: max-height 500ms ease-in-out, margin-bottom 500ms ease-in-out, padding-bottom 500ms ease-in-out, padding-top 500ms ease-in-out;\n  width: calc(100% - 80px); }\n  .comment.visible {\n    max-height: 100px;\n    padding: 15px;\n    margin-bottom: 10px; }\n    .comment.visible:last-of-type {\n      margin-bottom: 15px; }\n  .comment .comment__date {\n    display: inline-block;\n    font-size: 12px;\n    font-weight: bold;\n    margin-bottom: 5px;\n    text-transform: uppercase; }\n  .comment .comment__text {\n    line-height: 1.3;\n    margin-bottom: 0; }\n", ""]);
+exports.push([module.i, ".comment {\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n  background-color: #fff;\n  line-height: 1.3;\n  max-height: 0;\n  overflow: scroll;\n  padding: 0 15px;\n  -webkit-transition: max-height 500ms ease-in-out,\r margin-bottom 500ms ease-in-out,\r padding-bottom 500ms ease-in-out,\r padding-top 500ms ease-in-out;\n  transition: max-height 500ms ease-in-out,\r margin-bottom 500ms ease-in-out,\r padding-bottom 500ms ease-in-out,\r padding-top 500ms ease-in-out;\n  width: calc(100% - 80px); }\n  .comment.visible {\n    max-height: 100px;\n    padding: 15px;\n    margin-bottom: 10px; }\n    .comment.visible:last-of-type {\n      margin-bottom: 15px; }\n  .comment .comment__date {\n    display: inline-block;\n    font-size: 12px;\n    font-weight: bold;\n    margin-bottom: 5px;\n    text-transform: uppercase; }\n  .comment .comment__text {\n    line-height: 1.3;\n    margin-bottom: 0; }\n", ""]);
 
 // exports
 
@@ -28891,25 +28891,10 @@ exports.push([module.i, ".story-list {\n  margin-bottom: 30px; }\n", ""]);
 /* 251 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-module.exports = {
-  connectionString: 'mongodb://sconway:Sc0nway$co586@ds023523.mlab.com:23523/yesiwashigh',
-  url: 'CLOUDINARY_URL=cloudinary://358745272282758:SwNIYhNLfRkTAUNoIo9nd8kkolc@yesiwas',
-  resultIncrementer: 5,
-  uploadPreset: 'yesiwas',
-  uploadURL: 'https://api.cloudinary.com/v1_1/yesiwas/upload'
-};
-
-/***/ }),
-/* 252 */
-/***/ (function(module, exports, __webpack_require__) {
-
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(253);
+var content = __webpack_require__(252);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -28934,7 +28919,7 @@ if(false) {
 }
 
 /***/ }),
-/* 253 */
+/* 252 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(8)(undefined);
@@ -28942,19 +28927,19 @@ exports = module.exports = __webpack_require__(8)(undefined);
 
 
 // module
-exports.push([module.i, "/* http://meyerweb.com/eric/tools/css/reset/ \n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n", ""]);
+exports.push([module.i, "/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.0 | 20110126\r\n   License: none (public domain)\r\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 254 */
+/* 253 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(255);
+var content = __webpack_require__(254);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -28979,7 +28964,7 @@ if(false) {
 }
 
 /***/ }),
-/* 255 */
+/* 254 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(8)(undefined);
@@ -28993,7 +28978,7 @@ exports.push([module.i, "html,\nbody {\n  background: #f1f1f1;\n  font-family: s
 
 
 /***/ }),
-/* 256 */
+/* 255 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
