@@ -22758,7 +22758,7 @@ module.exports = ReactDOMInvalidARIAHook;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
+/* WEBPACK VAR INJECTION */(function(process) {
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -22832,6 +22832,11 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var uploadPreset = 'yesiwas';
+var RESULT_INCREMENTER = 5;
+
+console.log('url: ', process.env.uploadURL);
+
 var App = function (_Component) {
     _inherits(App, _Component);
 
@@ -22871,8 +22876,8 @@ var App = function (_Component) {
                         isFetched: true,
                         isFetching: false,
                         stories: prevState.stories.concat(results.stories),
-                        storyIndexLower: prevState.storyIndexLower + _config.resultIncrementer,
-                        storyIndexUpper: prevState.storyIndexUpper + _config.resultIncrementer
+                        storyIndexLower: prevState.storyIndexLower + RESULT_INCREMENTER,
+                        storyIndexUpper: prevState.storyIndexUpper + RESULT_INCREMENTER
                     };
                 });
             }).catch(function (err) {
@@ -22974,7 +22979,7 @@ var App = function (_Component) {
         };
 
         _this.uploadAndPost = function (newStory) {
-            var upload = _superagent2.default.post(_config.uploadURL).field('upload_preset', _config.uploadPreset).field('file', _this.state.storyImage);
+            var upload = _superagent2.default.post(_config.uploadURL).field('upload_preset', uploadPreset).field('file', _this.state.storyImage);
 
             upload.end(function (err, response) {
                 if (err) console.error(err);
@@ -23021,7 +23026,7 @@ var App = function (_Component) {
             shouldStoryboxShow: false,
             story: '',
             storyIndexLower: 0,
-            storyIndexUpper: _config.resultIncrementer,
+            storyIndexUpper: RESULT_INCREMENTER,
             stories: [],
             storyImage: null
         };
@@ -23189,6 +23194,7 @@ var App = function (_Component) {
 }(_react.Component);
 
 exports.default = App;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
 /* 194 */

@@ -168,6 +168,11 @@ const initServerOptions = () => {
   expressApp.use(express.static(path.join(__dirname)));
   expressApp.use(bodyParser.json());
   expressApp.use(bodyParser.urlencoded({extended: true}));
+  expressApp.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "https://yesiwas.herokuapp.com");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
   // expressApp.use(helmet());
   expressApp.use(limiter);
   // Handles default connections.

@@ -11,9 +11,13 @@ import Spinner from 'components/Spinner/Spinner';
 import StoryBox from 'components/StoryBox/StoryBox';
 import StoryList from 'components/StoryList/StoryList';
 import { defaultDate, throttle } from 'global/js/helpers';
-import { url, resultIncrementer, uploadPreset, uploadURL } from 'global/js/config.js';
+import { url, uploadURL } from 'global/js/config.js';
 import 'global/scss/reset.scss';
 import './App.scss';
+const uploadPreset = 'yesiwas';
+const RESULT_INCREMENTER = 5;
+
+console.log('url: ', process.env.uploadURL);
 
 
 export default class App extends Component {
@@ -35,7 +39,7 @@ export default class App extends Component {
             shouldStoryboxShow: false,
             story: '',
             storyIndexLower: 0,
-            storyIndexUpper: resultIncrementer,
+            storyIndexUpper: RESULT_INCREMENTER,
             stories: [],
             storyImage: null
         };
@@ -97,8 +101,8 @@ export default class App extends Component {
                     isFetched: true,
                     isFetching: false,
                     stories: prevState.stories.concat(results.stories),
-                    storyIndexLower: prevState.storyIndexLower + resultIncrementer,
-                    storyIndexUpper: prevState.storyIndexUpper + resultIncrementer
+                    storyIndexLower: prevState.storyIndexLower + RESULT_INCREMENTER,
+                    storyIndexUpper: prevState.storyIndexUpper + RESULT_INCREMENTER
                 };
             });
         })
