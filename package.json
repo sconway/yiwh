@@ -6,7 +6,7 @@
   "scripts": {
     "test": "npm test",
     "dev": "webpack && babel-node server.js",
-    "ssr": "NODE_ENV=production node ./server.js"
+    "ssr": "node ./server.js"
   },
   "keywords": [
     "yes",
@@ -55,6 +55,7 @@
     "require-from-string": "^2.0.1",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
+    "superagent": "^3.8.1",
     "url-loader": "^0.6.2",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.4",
