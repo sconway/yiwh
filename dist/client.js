@@ -10840,7 +10840,7 @@ var _App = __webpack_require__(193);
 
 var _App2 = _interopRequireDefault(_App);
 
-var _registerServiceWorker = __webpack_require__(255);
+var _registerServiceWorker = __webpack_require__(256);
 
 var _registerServiceWorker2 = _interopRequireDefault(_registerServiceWorker);
 
@@ -22758,7 +22758,7 @@ module.exports = ReactDOMInvalidARIAHook;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
+
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -22816,9 +22816,11 @@ var _StoryList2 = _interopRequireDefault(_StoryList);
 
 var _helpers = __webpack_require__(56);
 
-__webpack_require__(251);
+var _config = __webpack_require__(251);
 
-__webpack_require__(253);
+__webpack_require__(252);
+
+__webpack_require__(254);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22829,13 +22831,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-// import { url, uploadURL } from 'global/js/config.js';
-
-
-var uploadPreset = 'yesiwas';
-var RESULT_INCREMENTER = 5;
-
-console.log('url: ', process.env.uploadURL);
 
 var App = function (_Component) {
     _inherits(App, _Component);
@@ -22876,8 +22871,8 @@ var App = function (_Component) {
                         isFetched: true,
                         isFetching: false,
                         stories: prevState.stories.concat(results.stories),
-                        storyIndexLower: prevState.storyIndexLower + RESULT_INCREMENTER,
-                        storyIndexUpper: prevState.storyIndexUpper + RESULT_INCREMENTER
+                        storyIndexLower: prevState.storyIndexLower + _config.RESULT_INCREMENTER,
+                        storyIndexUpper: prevState.storyIndexUpper + _config.RESULT_INCREMENTER
                     };
                 });
             }).catch(function (err) {
@@ -22979,7 +22974,7 @@ var App = function (_Component) {
         };
 
         _this.uploadAndPost = function (newStory) {
-            var upload = _superagent2.default.post(process.env.uploadURL).field('upload_preset', uploadPreset).field('file', _this.state.storyImage);
+            var upload = _superagent2.default.post(_config.UPLOAD_URL).field('upload_preset', _config.UPLOAD_PRESET).field('file', _this.state.storyImage);
 
             upload.end(function (err, response) {
                 if (err) console.error(err);
@@ -23026,7 +23021,7 @@ var App = function (_Component) {
             shouldStoryboxShow: false,
             story: '',
             storyIndexLower: 0,
-            storyIndexUpper: RESULT_INCREMENTER,
+            storyIndexUpper: _config.RESULT_INCREMENTER,
             stories: [],
             storyImage: null
         };
@@ -23194,7 +23189,6 @@ var App = function (_Component) {
 }(_react.Component);
 
 exports.default = App;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
 /* 194 */
@@ -28535,7 +28529,7 @@ exports = module.exports = __webpack_require__(8)(undefined);
 
 
 // module
-exports.push([module.i, ".comment {\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n  background-color: #fff;\n  line-height: 1.3;\n  max-height: 0;\n  overflow: scroll;\n  padding: 0 15px;\n  -webkit-transition: max-height 500ms ease-in-out,\r margin-bottom 500ms ease-in-out,\r padding-bottom 500ms ease-in-out,\r padding-top 500ms ease-in-out;\n  transition: max-height 500ms ease-in-out,\r margin-bottom 500ms ease-in-out,\r padding-bottom 500ms ease-in-out,\r padding-top 500ms ease-in-out;\n  width: calc(100% - 80px); }\n  .comment.visible {\n    max-height: 100px;\n    padding: 15px;\n    margin-bottom: 10px; }\n    .comment.visible:last-of-type {\n      margin-bottom: 15px; }\n  .comment .comment__date {\n    display: inline-block;\n    font-size: 12px;\n    font-weight: bold;\n    margin-bottom: 5px;\n    text-transform: uppercase; }\n  .comment .comment__text {\n    line-height: 1.3;\n    margin-bottom: 0; }\n", ""]);
+exports.push([module.i, ".comment {\n  -ms-flex-item-align: end;\n      align-self: flex-end;\n  background-color: #fff;\n  line-height: 1.3;\n  max-height: 0;\n  overflow: auto;\n  padding: 0 15px;\n  -webkit-transition: max-height 500ms ease-in-out,\r margin-bottom 500ms ease-in-out,\r padding-bottom 500ms ease-in-out,\r padding-top 500ms ease-in-out;\n  transition: max-height 500ms ease-in-out,\r margin-bottom 500ms ease-in-out,\r padding-bottom 500ms ease-in-out,\r padding-top 500ms ease-in-out;\n  width: calc(100% - 80px); }\n  .comment.visible {\n    max-height: 100px;\n    padding: 15px;\n    margin-bottom: 10px; }\n    .comment.visible:last-of-type {\n      margin-bottom: 15px; }\n  .comment .comment__date {\n    display: inline-block;\n    font-size: 12px;\n    font-weight: bold;\n    margin-bottom: 5px;\n    text-transform: uppercase; }\n  .comment .comment__text {\n    line-height: 1.3;\n    margin-bottom: 0; }\n", ""]);
 
 // exports
 
@@ -28891,10 +28885,24 @@ exports.push([module.i, ".story-list {\n  margin-bottom: 30px; }\n", ""]);
 /* 251 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var UPLOAD_URL = exports.UPLOAD_URL = 'https://api.cloudinary.com/v1_1/yesiwas/upload';
+var RESULT_INCREMENTER = exports.RESULT_INCREMENTER = 5;
+var UPLOAD_PRESET = exports.UPLOAD_PRESET = 'yesiwas';
+
+/***/ }),
+/* 252 */
+/***/ (function(module, exports, __webpack_require__) {
+
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(252);
+var content = __webpack_require__(253);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -28919,7 +28927,7 @@ if(false) {
 }
 
 /***/ }),
-/* 252 */
+/* 253 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(8)(undefined);
@@ -28933,13 +28941,13 @@ exports.push([module.i, "/* http://meyerweb.com/eric/tools/css/reset/ \r\n   v2.
 
 
 /***/ }),
-/* 253 */
+/* 254 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(254);
+var content = __webpack_require__(255);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -28964,7 +28972,7 @@ if(false) {
 }
 
 /***/ }),
-/* 254 */
+/* 255 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(8)(undefined);
@@ -28972,13 +28980,13 @@ exports = module.exports = __webpack_require__(8)(undefined);
 
 
 // module
-exports.push([module.i, "html,\nbody {\n  background: #f1f1f1;\n  font-family: sans-serif;\n  font-size: 18px;\n  height: 100%;\n  width: 100%; }\n\na:hover,\nbutton:hover {\n  cursor: pointer; }\n\n.mdl-layout__content {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: column;\n          flex-direction: column; }\n\n.wrapper {\n  -webkit-box-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n  margin: 0 auto;\n  max-width: 992px;\n  padding-bottom: 68px;\n  padding-top: 40px;\n  width: 92%; }\n  @media (min-width: 640px) {\n    .wrapper {\n      width: 80%; } }\n  @media (min-width: 992px) {\n    .wrapper {\n      width: 70%; } }\n  .wrapper .mdl-spinner {\n    left: calc(50% - 14px); }\n  .wrapper .spinner {\n    margin-bottom: 60px; }\n", ""]);
+exports.push([module.i, "html,\nbody {\n  background: #f1f1f1;\n  font-family: sans-serif;\n  font-size: 18px;\n  height: 100%;\n  width: 100%; }\n\na:hover,\nbutton:hover {\n  cursor: pointer; }\n\n.mdl-layout__content {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: column;\n          flex-direction: column; }\n\n.wrapper {\n  -webkit-box-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n  margin: 0 auto;\n  max-width: 992px;\n  padding-bottom: 68px;\n  padding-top: 20px;\n  width: 92%; }\n  @media (min-width: 640px) {\n    .wrapper {\n      padding-top: 40px;\n      width: 80%; } }\n  @media (min-width: 992px) {\n    .wrapper {\n      width: 70%; } }\n  .wrapper .mdl-spinner {\n    left: calc(50% - 14px); }\n  .wrapper .spinner {\n    margin-bottom: 60px; }\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 255 */
+/* 256 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28993,8 +29001,6 @@ var registerServiceWorker = function registerServiceWorker() {
     window.addEventListener('load', function () {
       navigator.serviceWorker.register('/sw.js').then(function (registration) {
         console.log('ServiceWorker registration successful with scope: ', registration.scope);
-
-        registration.sync.register('storySync');
       }, function (err) {
         console.log('ServiceWorker registration failed: ', err);
       });
