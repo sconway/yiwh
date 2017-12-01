@@ -154,6 +154,7 @@ const handleStoryUpdates = () => {
 const initServerOptions = () => {
   const contents = fs.readFileSync(path.resolve(serverConfig.output.path, serverConfig.output.filename), 'utf8');
   const appInMemory = requireFromString(contents, serverConfig.output.filename);
+  console.log('APP IN MEMORY: ', appInMemory);
   const limiter = new RateLimit({
     windowMs: 15*60*1000, // 15 minutes 
     max: 100, // limit each IP to 100 requests per windowMs 
