@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import request from 'superagent';
+// import request from 'superagent';
 import root from 'window-or-global';
 import Drawer from 'components/Drawer/Drawer';
 import Header from 'components/Header/Header';
@@ -255,20 +255,20 @@ export default class App extends Component {
      * @param {Object} newStory
      */
     uploadAndPost = (newStory) => {
-        let upload = request.post(UPLOAD_URL)
-             .field('upload_preset', UPLOAD_PRESET)
-             .field('file', this.state.storyImage);
+        // let upload = request.post(UPLOAD_URL)
+        //      .field('upload_preset', UPLOAD_PRESET)
+        //      .field('file', this.state.storyImage);
 
-        upload.end((err, response) => {
-            if (err) console.error(err);
+        // upload.end((err, response) => {
+        //     if (err) console.error(err);
 
-            // If we got a good response, update new story with
-            // the url for the image to be used later.
-            if (response.body.secure_url !== '')
-                newStory.storyImageUrl = response.body.secure_url;
+        //     // If we got a good response, update new story with
+        //     // the url for the image to be used later.
+        //     if (response.body.secure_url !== '')
+        //         newStory.storyImageUrl = response.body.secure_url;
 
-            this.postData(newStory);
-        });
+        //     this.postData(newStory);
+        // });
     }
 
     /**
