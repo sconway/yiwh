@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import root from 'window-or-global';
+// import root from 'window-or-global';
 import classNames from 'classnames';
 import DebounceInput from 'react-debounce-input';
 import './CommentBox.scss';
@@ -14,12 +14,12 @@ export default class CommentBox extends Component {
      }
 
      componentDidMount() {
-        root.addEventListener('online', this.handleOnline, false);
+        window.addEventListener('online', this.handleOnline, false);
      }
 
      componentWillUnmount() {
         // Remove the event listener when we leave this page/component.
-        root.removeEventListener('online', this.handleOnline, false);
+        window.removeEventListener('online', this.handleOnline, false);
      }
 
      /**

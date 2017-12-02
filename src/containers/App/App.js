@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 // import request from 'superagent';
-import root from 'window-or-global';
+// import root from 'window-or-global';
 import Drawer from 'components/Drawer/Drawer';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
@@ -159,7 +159,7 @@ export default class App extends Component {
     handleScroll = throttle(() => {
         const scrollOffset = document.querySelector('.mdl-layout__content').scrollTop;
         const documentHeight = document.querySelector('.mdl-layout__content > .wrapper').offsetHeight;
-        const scrollDistance = scrollOffset + root.innerHeight;
+        const scrollDistance = scrollOffset + window.innerHeight;
 
         if (scrollOffset > 100 && !this.state.shouldScrollButtonBeVisible) {
             this.setState({ shouldScrollButtonBeVisible: true });
