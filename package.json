@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "test": "npm test",
-    "dev": "webpack && babel-node server.js",
     "ssr": "node ./server.js"
   },
   "keywords": [
