@@ -108,7 +108,7 @@ const handleStoryRequests = () => {
     const endIndex = parseInt(req.params.endIndex);
     const domain = req.params.domain.length > 3 ? {mindState: req.params.domain} : {};
 
-    db.collection('stories').count().then((count) => {
+    db.collection('stories').find(domain).count().then((count) => {
       storyCount = count;
     });
 
