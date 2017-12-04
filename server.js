@@ -1,6 +1,7 @@
 const express = require('express');
 const webpack = require('webpack');
 const path = require('path');
+const helmet = require('helmet');
 const requireFromString = require('require-from-string');
 const MemoryFS = require('memory-fs');
 const serverConfig = require('./config/server.production.js');
@@ -102,9 +103,10 @@ const handleStoryRequests = () => {
   // Handles requests to the stories collection with the 
   // supplied start and end index. Skips to the start 
   // index and stops at the end index. 
-  expressApp.get('/stories/:startIndex/:endIndex', (req, res) => {
+  expressApp.get('/stories/:domain/:startIndex/:endIndex', (req, res) => {
     const startIndex = parseInt(req.params.startIndex);
     const endIndex = parseInt(req.params.endIndex);
+    const domain = req.params.domain.length > 3 ? {mindState: req.params.domain} : {};
 
     db.collection('stories').count().then((count) => {
       storyCount = count;
@@ -113,7 +115,7 @@ const handleStoryRequests = () => {
     // Finds all the stories in the collection, sorts them into
     // an array and sends them back to the client.
     db.collection('stories')
-      .find()
+      .find(domain)
       .skip(startIndex)
       .limit(endIndex)
       .sort({ 'points': -1 })
@@ -167,12 +169,12 @@ const initServerOptions = () => {
   expressApp.use(bodyParser.json());
   expressApp.use(bodyParser.urlencoded({extended: true}));
   expressApp.use(limiter);
-  // expressApp.use(helmet());
-  expressApp.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "https://yesiwas.herokuapp.com");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
+  expressApp.use(helmet());
+  // expressApp.use((req, res, next) => {
+  //   res.header("Access-Control-Allow-Origin", "https://yesiwas.herokuapp.com");
+  //   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  //   next();
+  // });
 
   // Handles default connections.
   expressApp.get('/', appInMemory.default);

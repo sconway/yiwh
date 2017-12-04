@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './Footer.scss';
 
-const Footer = () => {
+const Footer = (props) => {
     /**
      * Called when the contact button is clicked. Copies the contact
      * email to the clipboard for later use.
@@ -15,10 +15,13 @@ const Footer = () => {
         alert('email address copied to clipboard');
     };
 
+    // Format the name that displays in the footer
+    const domain = props.domain.length > 3 ? ' ' + props.domain : '...';
+
     return (
         <footer className='footer mdl-mini-footer'>
             <div className='mdl-mini-footer__left-section'>
-                <div className='mdl-logo'>Yes, I was... &copy; 2017</div>
+                <div className='mdl-logo'>Yes, I was{domain} &copy; 2017</div>
                 <a href='' className='footer__contact' id='tooltip' onClick={handleClick}>
                     <span className='icon material-icons'>email</span>
                     Contact

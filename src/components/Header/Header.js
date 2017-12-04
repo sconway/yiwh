@@ -6,11 +6,13 @@ const Header = (props) => {
     const showOldest = () => props.filterByDate(-1);
     const showLowestRated = () => props.filterByRating(-1);
     const showTopRated = () => props.filterByRating(1);
+    // Format the name that displays in the footer
+    const domain = props.domain.length > 3 ? ' ' + props.domain : '...';
 
     return (
         <header className='mdl-layout__header'>
             <div className='mdl-layout__header-row'>
-                <span className='mdl-layout-title mdl-layout--large-screen-only'>Yes, I was...</span>
+                <h1 className='mdl-layout-title mdl-layout--large-screen-only'>Yes, I was{domain}</h1>
 
                 <div className='mdl-layout-spacer'></div>
 

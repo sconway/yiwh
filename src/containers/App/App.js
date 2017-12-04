@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import request from 'superagent';
-// import root from 'window-or-global';
 import Drawer from 'components/Drawer/Drawer';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
@@ -20,6 +19,7 @@ export default class App extends Component {
         super(props);
 
         this.storyCount = 0;
+        this.domain = 'any';
         
         this.state = {
             filteredStories: [],
@@ -43,6 +43,7 @@ export default class App extends Component {
     componentDidMount() {
         const scrollContainer = document.querySelector('.mdl-layout__content');
 
+        this.getDomain();
         this.fetchStories();
         scrollContainer.addEventListener('scroll', this.handleScroll, false);
     }
@@ -81,7 +82,7 @@ export default class App extends Component {
         this.setState({ isFetching: true });
 
         // Creates the request for the new list of stories.
-        fetch(`/stories/${this.state.storyIndexLower}/${this.state.storyIndexUpper}`)
+        fetch(`/stories/${this.domain}/${this.state.storyIndexLower}/${this.state.storyIndexUpper}`)
         .then((response) => {
             if (response.ok) {
                 return response.json()
@@ -139,6 +140,18 @@ export default class App extends Component {
         });
 
         this.setState({ filteredStories: newStories });
+    }
+
+    getDomain = () => {
+        const origin = location.origin;
+
+        if (origin.includes('drunk')) {
+            this.domain = 'drunk';
+        }
+
+        if (origin.includes('high')) {
+            this.domain = 'high';
+        }
     }
 
     /**
@@ -259,6 +272,8 @@ export default class App extends Component {
              .field('upload_preset', UPLOAD_PRESET)
              .field('file', this.state.storyImage);
 
+        consle.log('upload: ', upload);
+
         upload.end((err, response) => {
             if (err) console.error(err);
 
@@ -272,7 +287,8 @@ export default class App extends Component {
     }
 
     /**
-     * Makes sure that a valid story was entered.
+     * Makes sure that a valid story was entered before sending it off
+     * to be posted. 
      */
     validateStory = () => {
         let newStory = {
@@ -296,7 +312,8 @@ export default class App extends Component {
     render() {
         return (
             <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-                <Header 
+                <Header
+                    domain={this.domain} 
                     filterByDate={this.filterStoriesByDate}
                     filterByRating={this.filterStoriesByRating}
                     updateSearchTerm={this.updateSearchTerm} 
@@ -311,7 +328,7 @@ export default class App extends Component {
                     {this.state.isPosted && <Message />}
 
                     <div className='wrapper'>
-                        {!this.state.isFetched && <div className="mdl-spinner mdl-js-spinner is-active"></div>}
+                        {!this.state.isFetched && <Spinner />}
 
                         {this.state.isFetched && (
                             <div>
@@ -341,7 +358,7 @@ export default class App extends Component {
                         )}
                     </div>
 
-                    <Footer />
+                    <Footer domain={this.domain} />
                 </main>
             </div>
         );

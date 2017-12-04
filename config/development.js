@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
     entry: path.resolve(__dirname, '..', 'src/client/index.js'),
@@ -45,5 +46,30 @@ module.exports = {
                 loader: 'url-loader'
             }
         ]
-    }
+    },
+
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env':{
+                'NODE_ENV': JSON.stringify('production')
+            }
+        }),
+        
+        // uglfy / minify js
+        new webpack.optimize.UglifyJsPlugin({
+            minimize: true,
+            // sourceMap: true,
+            compress:{
+                sequences: true,
+                dead_code: true,
+                conditionals: true,
+                booleans: true,
+                unused: true,
+                if_return: true,
+                join_vars: true,
+                drop_console: true,  // change to true for live release
+                warnings: false // set to true if you want hundreds of extra output lines :)
+            }
+        })
+    ]
 };
