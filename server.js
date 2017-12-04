@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const requireFromString = require('require-from-string');
 const MemoryFS = require('memory-fs');
 const serverConfig = require('./config/server.production.js');
+const sslRedirect = require('heroku-ssl-redirect');
 const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
@@ -155,9 +156,7 @@ const handleStoryUpdates = () => {
  */
 const initServerOptions = () => {
   const contents = fs.readFileSync(path.resolve(serverConfig.output.path, serverConfig.output.filename), 'utf8');
-  // console.log('CONTENTS: ', contents);
   const appInMemory = requireFromString(contents, serverConfig.output.filename);
-  // console.log('APP IN MEMORY: ', appInMemory);
   const limiter = new RateLimit({
     windowMs: 15*60*1000, // 15 minutes 
     max: 100, // limit each IP to 100 requests per windowMs 
@@ -168,13 +167,9 @@ const initServerOptions = () => {
   expressApp.use(express.static(path.join(__dirname)));
   expressApp.use(bodyParser.json());
   expressApp.use(bodyParser.urlencoded({extended: true}));
+  expressApp.use(sslRedirect());
   expressApp.use(limiter);
   expressApp.use(helmet());
-  // expressApp.use((req, res, next) => {
-  //   res.header("Access-Control-Allow-Origin", "https://yesiwas.herokuapp.com");
-  //   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  //   next();
-  // });
 
   // Handles default connections.
   expressApp.get('/', appInMemory.default);
