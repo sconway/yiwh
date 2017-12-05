@@ -6,10 +6,12 @@ const Drawer = (props) => {
     const showOldest = () => props.filterByDate(-1);
     const showLowestRated = () => props.filterByRating(-1);
     const showTopRated = () => props.filterByRating(1);
+    // Format the name that displays in the footer
+    const domain = props.domain.length > 3 ? ' ' + props.domain : '...';
 
     return (
         <div className='mdl-layout__drawer  mdl-layout--small-screen-only'>
-            <span className='mdl-layout-title'>Yes, I was...</span>
+            <span className='mdl-layout-title'>Yes, I was{domain}</span>
 
             <nav className='mdl-navigation'>
                 <a className='mdl-navigation__link' onClick={showTopRated}>Top Rated</a>

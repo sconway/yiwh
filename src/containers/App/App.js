@@ -142,16 +142,15 @@ export default class App extends Component {
         this.setState({ filteredStories: newStories });
     }
 
+    /**
+     * Called on component mount. Checks the origin and sets the 
+     * class variable if it is one of the special origins.
+     */
     getDomain = () => {
         const origin = location.origin;
 
-        if (origin.includes('drunk')) {
-            this.domain = 'drunk';
-        }
-
-        if (origin.includes('high')) {
-            this.domain = 'high';
-        }
+        if (origin.includes('drunk')) this.domain = 'drunk';
+        if (origin.includes('high')) this.domain = 'high';
     }
 
     /**
@@ -319,7 +318,8 @@ export default class App extends Component {
                     updateSearchTerm={this.updateSearchTerm} 
                 />
                 
-                <Drawer 
+                <Drawer
+                    domain={this.domain}
                     filterByDate={this.filterStoriesByDate}
                     filterByRating={this.filterStoriesByRating}
                 />
