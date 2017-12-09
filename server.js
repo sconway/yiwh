@@ -107,7 +107,7 @@ const handleStoryRequests = () => {
   expressApp.get('/stories/:domain/:startIndex/:endIndex', (req, res) => {
     const startIndex = parseInt(req.params.startIndex);
     const endIndex = parseInt(req.params.endIndex);
-    const domain = req.params.domain.length > 1 ? {mindState: req.params.domain} : {};
+    const domain = req.params.domain.length > 2 ? {mindState: req.params.domain} : {};
 
     db.collection('stories').find(domain).count().then((count) => {
       storyCount = count;

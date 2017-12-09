@@ -82,7 +82,7 @@ export default class App extends Component {
         this.setState({ isFetching: true });
 
         // Creates the request for the new list of stories.
-        fetch(`/stories/${this.domain}/${this.state.storyIndexLower}/${this.state.storyIndexUpper}`)
+        fetch(`/stories/${this.state.domain}/${this.state.storyIndexLower}/${this.state.storyIndexUpper}`)
         .then((response) => {
             if (response.ok) {
                 return response.json()
@@ -307,7 +307,7 @@ export default class App extends Component {
 
     render() {
         console.log('domain: ', this.state.domain);
-        
+
         return (
             <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
                 <Header
@@ -358,7 +358,7 @@ export default class App extends Component {
                         )}
                     </div>
 
-                    <Footer domain={this.domain} />
+                    <Footer domain={this.state.domain} />
                 </main>
             </div>
         );
