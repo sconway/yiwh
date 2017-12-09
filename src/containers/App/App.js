@@ -146,7 +146,8 @@ export default class App extends Component {
      * class variable if it is one of the special origins.
      */
     getDomain = () => {
-        // Make sure location is defined since we render server side      
+        // Make sure location is defined since we render server side
+        const location = location || {origin: ''};      
         const origin = location.origin;
 
         if (origin.includes('drunk')) this.domain = 'drunk';
