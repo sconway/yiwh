@@ -67,7 +67,7 @@ module.exports = {
                 unused: true,
                 if_return: true,
                 join_vars: true,
-                drop_console: true,  // change to true for live release
+                // drop_console: true,  // change to true for live release
                 warnings: false // set to true if you want hundreds of extra output lines :)
             }
         })

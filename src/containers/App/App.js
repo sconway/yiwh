@@ -19,9 +19,9 @@ export default class App extends Component {
         super(props);
 
         this.storyCount = 0;
+        this.domain = 'a';
         
         this.state = {
-            domain: 'a',
             filteredStories: [],
             isFetching: false,
             isFetched: false,
@@ -82,7 +82,7 @@ export default class App extends Component {
         this.setState({ isFetching: true });
 
         // Creates the request for the new list of stories.
-        fetch(`/stories/${this.state.domain}/${this.state.storyIndexLower}/${this.state.storyIndexUpper}`)
+        fetch(`/stories/${this.domain}/${this.state.storyIndexLower}/${this.state.storyIndexUpper}`)
         .then((response) => {
             if (response.ok) {
                 return response.json()
@@ -306,19 +306,17 @@ export default class App extends Component {
     }
 
     render() {
-        console.log('domain: ', this.state.domain);
-
         return (
             <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
                 <Header
-                    domain={this.state.domain} 
+                    domain={this.domain} 
                     filterByDate={this.filterStoriesByDate}
                     filterByRating={this.filterStoriesByRating}
                     updateSearchTerm={this.updateSearchTerm} 
                 />
                 
                 <Drawer
-                    domain={this.state.domain}
+                    domain={this.domain}
                     filterByDate={this.filterStoriesByDate}
                     filterByRating={this.filterStoriesByRating}
                 />
@@ -333,7 +331,7 @@ export default class App extends Component {
                             <div>
                                 {!this.state.isPosted && (
                                     <StoryBox
-                                        domain={this.state.domain}
+                                        domain={this.domain}
                                         handleRadioButtonSelection={this.handleRadioButtonSelection}
                                         handleStoryBoxToggle={this.handleStoryBoxToggle}
                                         isPosting={this.state.isPosting}
@@ -358,7 +356,7 @@ export default class App extends Component {
                         )}
                     </div>
 
-                    <Footer domain={this.state.domain} />
+                    <Footer domain={this.domain} />
                 </main>
             </div>
         );
