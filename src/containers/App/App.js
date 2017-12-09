@@ -40,6 +40,10 @@ export default class App extends Component {
         };
     }
 
+    componentWillMount() {
+        this.getDomain();
+    }
+
     componentDidMount() {
         const scrollContainer = document.querySelector('.mdl-layout__content');
 
@@ -310,8 +314,6 @@ export default class App extends Component {
     }
 
     render() {
-        this.getDomain();
-
         return (
             <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
                 <Header
