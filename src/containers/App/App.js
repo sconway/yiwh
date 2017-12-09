@@ -19,9 +19,9 @@ export default class App extends Component {
         super(props);
 
         this.storyCount = 0;
-        this.domain = 'a';
         
         this.state = {
+            domain: 'a',
             filteredStories: [],
             isFetching: false,
             isFetched: false,
@@ -40,13 +40,10 @@ export default class App extends Component {
         };
     }
 
-    componentWillMount() {
-        this.getDomain();
-    }
-
     componentDidMount() {
         const scrollContainer = document.querySelector('.mdl-layout__content');
 
+        this.getDomain();
         this.fetchStories();
         scrollContainer.addEventListener('scroll', this.handleScroll, false);
     }
@@ -151,11 +148,10 @@ export default class App extends Component {
      */
     getDomain = () => {
         // Make sure location is defined since we render server side
-        const location = location || {origin: ''};      
         const origin = location.origin;
 
-        if (origin.includes('drunk')) this.domain = 'drunk';
-        if (origin.includes('high')) this.domain = 'high';
+        if (origin.includes('drunk')) this.setState({ domain: 'drunk' });
+        if (origin.includes('high')) this.setState({ domain: 'high' });
     }
 
     /**
@@ -164,9 +160,7 @@ export default class App extends Component {
      * 
      * @param     {String : value}
      */
-    handleRadioButtonSelection = (value) => {
-        this.setState({ mindState: value });
-    }
+    handleRadioButtonSelection = (value) => this.setState({ mindState: value });
 
     /**
      * Called whenever there is a scroll event. Throttles the event and
@@ -261,9 +255,7 @@ export default class App extends Component {
      *
      * @param     { Object } : file
      */
-    updateStoryImage = (file) => {
-        this.setState({ storyImage: file });
-    }
+    updateStoryImage = (file) => this.setState({ storyImage: file });
 
     /**
      * Called for stories that have an image uploaded with them. Uploads
@@ -314,17 +306,19 @@ export default class App extends Component {
     }
 
     render() {
+        console.log('domain: ', this.state.domain);
+        
         return (
             <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
                 <Header
-                    domain={this.domain} 
+                    domain={this.state.domain} 
                     filterByDate={this.filterStoriesByDate}
                     filterByRating={this.filterStoriesByRating}
                     updateSearchTerm={this.updateSearchTerm} 
                 />
                 
                 <Drawer
-                    domain={this.domain}
+                    domain={this.state.domain}
                     filterByDate={this.filterStoriesByDate}
                     filterByRating={this.filterStoriesByRating}
                 />
@@ -339,7 +333,7 @@ export default class App extends Component {
                             <div>
                                 {!this.state.isPosted && (
                                     <StoryBox
-                                        domain={this.domain}
+                                        domain={this.state.domain}
                                         handleRadioButtonSelection={this.handleRadioButtonSelection}
                                         handleStoryBoxToggle={this.handleStoryBoxToggle}
                                         isPosting={this.state.isPosting}

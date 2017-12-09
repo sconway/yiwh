@@ -5,8 +5,6 @@ var urlsToCache = [
 
 
 self.addEventListener('install', function(event) {
-  console.log('install occurred');
-
   // Perform install steps
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -19,8 +17,6 @@ self.addEventListener('install', function(event) {
 
 
 self.addEventListener('fetch', function(event) {
-  console.log('fetch occurred: ', event);
-
   event.respondWith(
     caches.match(event.request)
       .then(function(response) {
@@ -62,8 +58,6 @@ self.addEventListener('fetch', function(event) {
 
 
 self.addEventListener('activate', function(event) {
-  console.log('activate occurred');
-
   var cacheWhitelist = ['v1'];
 
   event.waitUntil(
@@ -82,7 +76,6 @@ self.addEventListener('activate', function(event) {
 
 self.addEventListener('sync', function(event) {
   if (event.tag === 'storySync') {
-    console.log('sync happened');
     // event.waitUntil(doSomeStuff());
   }
 });
