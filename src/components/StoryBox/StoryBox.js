@@ -77,7 +77,10 @@ export default class StoryBox extends Component {
                         mindState={this.props.mindState}
                     />
 
-                    <ImageUploader updateStoryImage={this.props.updateStoryImage} />
+                    <ImageUploader
+                        domain={this.props.domain} 
+                        updateStoryImage={this.props.updateStoryImage} 
+                    />
 
                     {this.state.isOffline && <p className='error-message'>{connectionErrorMessage}</p>}
 

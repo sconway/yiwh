@@ -19,7 +19,7 @@ export default class App extends Component {
         super(props);
 
         this.storyCount = 0;
-        this.domain = 'any';
+        this.domain = 'a';
         
         this.state = {
             filteredStories: [],
@@ -43,7 +43,6 @@ export default class App extends Component {
     componentDidMount() {
         const scrollContainer = document.querySelector('.mdl-layout__content');
 
-        this.getDomain();
         this.fetchStories();
         scrollContainer.addEventListener('scroll', this.handleScroll, false);
     }
@@ -147,6 +146,7 @@ export default class App extends Component {
      * class variable if it is one of the special origins.
      */
     getDomain = () => {
+        // Make sure location is defined since we render server side      
         const origin = location.origin;
 
         if (origin.includes('drunk')) this.domain = 'drunk';
@@ -309,6 +309,8 @@ export default class App extends Component {
     }
 
     render() {
+        this.getDomain();
+
         return (
             <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
                 <Header
@@ -334,6 +336,7 @@ export default class App extends Component {
                             <div>
                                 {!this.state.isPosted && (
                                     <StoryBox
+                                        domain={this.domain}
                                         handleRadioButtonSelection={this.handleRadioButtonSelection}
                                         handleStoryBoxToggle={this.handleStoryBoxToggle}
                                         isPosting={this.state.isPosting}

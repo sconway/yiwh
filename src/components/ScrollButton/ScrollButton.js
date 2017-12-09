@@ -11,9 +11,7 @@ const ScrollButton = (props) => {
      * Called when the scroll button is clicked.
      * Dispatches the scroll function.
      */
-    const handleClick = () => {
-        scrollToTop(1000);
-    };
+    const handleClick = () => scrollToTop(1000);
 
     /**
      * Scrolls the page to the top in an animated fasion. Adapted from:
@@ -27,7 +25,7 @@ const ScrollButton = (props) => {
 
         const scrollInterval = setInterval(() => {
             if (container.scrollTop != 0) {
-                container.scrollBy( 0, scrollStep );
+                container.scrollBy(0, scrollStep );
             } else {
                 clearInterval(scrollInterval); 
             }
@@ -35,10 +33,7 @@ const ScrollButton = (props) => {
     };
 
     return (
-        <button 
-            className={buttonClasses}
-            onClick={handleClick}
-        >
+        <button className={buttonClasses} onClick={handleClick} >
             <i className='material-icons'>arrow_upward</i>
         </button>
     );

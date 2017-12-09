@@ -52,11 +52,10 @@ export default class ImageUploader extends Component {
      * Called when the preview image is loaded. Sets the state 
      * that toggles the spinner loader.
      */    
-    onImageLoad = () => {
-        this.setState({ didImageLoad: true })
-    }
+    onImageLoad = () => this.setState({ didImageLoad: true });
 
     render() {
+        const domain = this.props.domain === 'high' ? 'high' : 'drunk';
         const imageClasses = classNames('image-uploader__preview', {
             'loaded': this.state.didImageLoad
         });
@@ -75,7 +74,7 @@ export default class ImageUploader extends Component {
                     rejectClassName='rejected'
                 >
                     {({isDragActive, isDragReject}) => {
-                        if (isDragReject) return 'Are you dragging an image from another site? How high are you?';
+                        if (isDragReject) return `Are you dragging an image from another site? How ${domain} are you?`;
                         if (isDragActive) return 'Looks good to me. Drop that shit.';
                         return 'Drop an image or click to select a file to upload.';
                     }}
