@@ -151,7 +151,7 @@ export default class App extends Component {
         this.setState({
             domain: isDrunk ? 'drunk' : (isHigh ? 'high' : 'a'),
             isFetching: true
-        }, this.fetchStories());
+        }, this.fetchStories);
     }
 
     /**
