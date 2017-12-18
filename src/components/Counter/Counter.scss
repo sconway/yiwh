@@ -3,66 +3,58 @@
 
 .counter {
   display: flex;
+  flex-wrap: wrap;
 
   .counter__buttons {
     align-items: center;
     display: flex;
     justify-content: flex-end;
+    outline-color: transparent;
     user-select: none;
 
     .counter__buttons--minus,
     .counter__buttons--plus {
+      @include shadow(2px);
       align-items: center;
+      background-color: lightgreen;
+      border: $brutalist-border;
       color: #000;
       display: flex;
       font-size: 20px;
-      height: 25px;
+      height: 30px;
       justify-content: center;
       margin: 0 5px;
       min-height: initial;
       min-width: initial;
-      width: 25px;
+      width: 30px;
 
       @include for-phone-up {
-        height: 30px;
-        width: 30px;
+        height: 35px;
+        width: 35px;
       }
-    }
 
-    .counter__buttons--minus {
-        background-color: $secondary !important;
-        
-        &:focus {
-          background-color: $secondary !important;
-        }
-    }
-
-    .counter__buttons--plus {
-        background-color: $primary !important;
-        
-        &:focus {
-          background-color: $primary !important;
-        }
+      &:hover {
+        @include shadow(0px);
+        background-color: #000;
+        color: lightgreen;
+      }
     }
   }
   
   .counter__points { 
     align-items: center;
-    color: #fff;
+    color: #000;
     display: flex;
+    flex-wrap: wrap;
+    font-weight: bold;
     justify-content: center;
+    margin-bottom: 8px;
+    margin-right: 10px;
     pointer-events: none;
 
     @include for-phone-up {
-      margin-right: 10px;
+      margin-bottom: 0;
     }
-
-    // @include for-tablet-portrait-up {
-    //   color: #000;
-    //   position: absolute;
-    //   right: 15px;
-    //   top: 15px;
-    // }
 
     .counter__points__number {
       font-size: 20px;

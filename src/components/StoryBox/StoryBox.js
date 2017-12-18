@@ -56,7 +56,7 @@ export default class StoryBox extends Component {
         return (
             <section>
                 <button className='story-box__toggle' onClick={this.props.handleStoryBoxToggle} >
-                    Tell us a story
+                    Tell us a story <span className='story-box__icon'>✏️</span>
                 </button>
 
                 <div className={storyBoxClasses}>

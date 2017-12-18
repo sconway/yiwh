@@ -1,5 +1,7 @@
+// Colors
 $primary: #4caf50;
 $secondary: #ff5252;
+$brown-100: #b5651d;
 
 // Spinner
 $spinner-green: #008744;
@@ -9,4 +11,33 @@ $spinner-yellow: #ffa700;
 $spinner-white: #eee;
 $spinner-width: 100px;
 
+// Layout
 $max-width: 1400px;
+
+// Misc
+$base-transition-time: 325ms;
+$brutalist-border: 3px solid black;
+
+
+@keyframes scribble {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10%);
+  }
+  50% {
+    transform: translateX(20%);
+  }
+  75% {
+    transform: translateX(-20%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@mixin shadow($radius) {
+  box-shadow: $radius $radius #000;
+}
+

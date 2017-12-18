@@ -2,7 +2,8 @@ import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import CommentBox from 'components/CommentBox/CommentBox';
 import CommentList from 'components/CommentList/CommentList';
-import Counter from 'components/Counter/Counter';
+import StoryHeader from 'components/StoryHeader/StoryHeader';
+import StoryFooter from 'components/StoryFooter/StoryFooter';
 import { defaultDate } from 'global/js/helpers';
 import './Story.scss';
 
@@ -46,34 +47,34 @@ export default class Story extends PureComponent {
         let interval = Math.floor(seconds / 31536000);
 
         if (interval > 1) {
-            return interval + " years";
+            return interval + ' years';
         }
 
         interval = Math.floor(seconds / 2592000);
 
         if (interval > 1) {
-            return interval + " months";
+            return interval + ' months';
         }
 
         interval = Math.floor(seconds / 86400);
 
         if (interval > 1) {
-            return interval + " days";
+            return interval + ' days';
         }
 
         interval = Math.floor(seconds / 3600);
 
         if (interval > 1) {
-            return interval + " hours";
+            return interval + ' hours';
         }
 
         interval = Math.floor(seconds / 60);
 
         if (interval > 1) {
-            return interval + " minutes";
+            return interval + ' minutes';
         }
 
-        return Math.floor(seconds) + " seconds";
+        return Math.floor(seconds) + ' seconds';
     }
 
     /**
@@ -145,9 +146,12 @@ export default class Story extends PureComponent {
 
         return (
             <li className='story-wrapper'>
-                <div className='story mdl-shadow--4dp'>
+                <div className='story'>
                     <section className='story__body'>
-                        <span className='story__date'>{formattedDate}</span>
+                        <StoryHeader 
+                            formattedDate={formattedDate} 
+                            mindState={this.props.mindState} 
+                        />
 
                         <p className='story__text'>{this.props.story}</p>
 
@@ -164,16 +168,13 @@ export default class Story extends PureComponent {
                                 &mdash; Yes, I was {this.props.mindState}
                             </span>
                         )}
-                    </section>
 
-                    <section className='story__footer'>
-                        <Counter points={this.props.points} storyID={this.props.storyID} />
-
-                        <a className='story__comment-toggle' onClick={this.toggleComments}>
-                            {this.state.shouldCommentsShow ? 'Hide ' : 'Show '} 
-                            Comments 
-                            ({this.state.comments.length})
-                        </a>
+                        <StoryFooter 
+                            numComments={this.state.comments.length} 
+                            points={this.props.points} 
+                            storyID={this.props.storyID} 
+                            toggleComments={this.toggleComments}
+                        />
                     </section>
                 </div>
 

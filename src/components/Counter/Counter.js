@@ -77,18 +77,18 @@ export default class Counter extends Component {
             <div className='counter'>
                 <span className='counter__points'>
                     <span className='counter__points__number'>{this.state.points}</span>
-                    <span className='mdl-layout--large-screen-only'>Points</span>
+                    <span className='counter__points__text'>Points</span>
                 </span>
 
                 <div className='counter__buttons'>
                     <button 
-                        className='counter__buttons--plus mdl-button mdl-button--fab mdl-button--colored  mdl-button--primary mdl-js-button mdl-js-ripple-effect'
+                        className='counter__buttons--plus'
                         onClick={this.incrementCount}
                     >
                         <i className='material-icons'>add</i>
                     </button>
                     <button 
-                        className='counter__buttons--minus mdl-button mdl-button--fab mdl-button--colored mdl-js-button mdl-js-ripple-effect'
+                        className='counter__buttons--minus'
                         onClick={this.decrementCount}
                     >
                         <i className='material-icons'>remove</i>

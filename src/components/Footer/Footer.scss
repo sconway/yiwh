@@ -27,7 +27,9 @@ footer {
 
     .mdl-logo {
       font-size: 14px;
-      margin-bottom: 0;
+      line-height: 1;
+      margin-bottom: 15px;
+      margin-top: 15px;
       margin-right: 25px;
 
       @include for-tablet-portrait-up {
@@ -45,6 +47,7 @@ footer {
 
     .mdl-mini-footer__left-section {
       flex: 1;
+      flex-wrap: wrap;
       justify-content: space-between;
       max-width: $max-width;
       padding: 0 20px;

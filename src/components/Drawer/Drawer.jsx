@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import './Drawer.scss';
 
 const Drawer = (props) => {
     const showNewest = () => props.filterByDate(1);
@@ -10,7 +11,7 @@ const Drawer = (props) => {
     const domain = props.domain.length > 3 ? ' ' + props.domain : '...';
 
     return (
-        <div className='mdl-layout__drawer  mdl-layout--small-screen-only'>
+        <div className='drawer mdl-layout__drawer mdl-layout--small-screen-only'>
             <span className='mdl-layout-title'>Yes, I was{domain}</span>
 
             <nav className='mdl-navigation'>

@@ -1,0 +1,10 @@
+@import '../../global/scss/variables.scss';
+
+.story__header {
+  align-items: center;
+  border-bottom: $brutalist-border;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 10px;  
+}

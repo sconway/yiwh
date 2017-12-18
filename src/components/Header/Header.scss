@@ -3,7 +3,7 @@
 .mdl-layout__header {
   background-color: $primary;
 
-  // .mdl-layout__header-row {
-  //   max-width: $max-width;
-  // }
+  .mdl-navigation__link {
+    font-size: 16px;
+  }
 }

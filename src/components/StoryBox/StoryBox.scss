@@ -8,6 +8,7 @@
   overflow: auto;
   position: relative;
   transition: opacity 500ms ease-in-out,
+              margin-bottom 250ms ease-in-out 500ms,
               max-height 250ms ease-in-out 500ms;
 
   &.error {
@@ -30,9 +31,7 @@
   }
 
   &.invalid {
-
     .story-box__story {
-
       &:focus {
         border-color: #f1a83d;
       }
@@ -45,9 +44,10 @@
   }
 
   &.is-posting {
-
-    .spinner {
-      display: block;
+    .story-box__submit {
+      .spinner {
+        display: block;
+      }
     }
   }
 
@@ -57,6 +57,7 @@
 
     &:not(.has-image) {
       transition: max-height 250ms ease-in-out,
+                  margin-bottom 250ms ease-in-out,
                   opacity 500ms ease-in-out 250ms;
       max-height: 500px;
     }
@@ -64,11 +65,8 @@
 
   .error-message {
     color: $secondary;
+    font-size: 14px;
     margin-bottom: 15px;
-  }
-
-  .spinner {
-    display: none;
   }
 
   .story-box__story {
@@ -102,6 +100,7 @@
     z-index: 1;
 
     .spinner {
+      display: none;
       margin: 0 15px 0 0;
       padding: 0;
       width: 25px;
@@ -110,18 +109,33 @@
 }
 
 .story-box__toggle {
-  background-color: $primary;
-  border: none;
+  @include shadow(-5px);
+  background-color: lightgreen;
+  border: $brutalist-border;
   border-radius: 0;
   font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 1px;
   margin-bottom: 20px;
   outline: 0;
   padding: 15px;
   text-align: center;
-  transition: background-color 300ms ease-in-out;
+  text-transform: uppercase;
+  transition: all 300ms ease-in-out;
   width: 100%;
 
   &:hover {
-    background-color: darken($primary, 20%);
+    background-color: #000;
+    color: lightgreen;
+
+    .story-box__icon {
+      animation: scribble 0.5s 1;
+    }
+  }
+
+  .story-box__icon {
+    display: inline-block;
+    margin-left: 10px;
+    width: 30px;
   }
 }

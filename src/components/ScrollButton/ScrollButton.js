@@ -11,7 +11,7 @@ const ScrollButton = (props) => {
      * Called when the scroll button is clicked.
      * Dispatches the scroll function.
      */
-    const handleClick = () => scrollToTop(1000);
+    const handleClick = () => scrollToTop(500);
 
     /**
      * Scrolls the page to the top in an animated fasion. Adapted from:

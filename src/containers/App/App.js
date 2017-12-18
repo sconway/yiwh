@@ -10,7 +10,7 @@ import Spinner from 'components/Spinner/Spinner';
 import StoryBox from 'components/StoryBox/StoryBox';
 import StoryList from 'components/StoryList/StoryList';
 import { defaultDate, throttle } from 'global/js/helpers';
-import { RESULT_INCREMENTER, UPLOAD_PRESET, UPLOAD_URL } from 'global/js/config.js';
+import { RESULT_INCREMENTER, SCROLL_BUFFER, UPLOAD_PRESET, UPLOAD_URL } from 'global/js/config.js';
 import 'global/scss/reset.scss';
 import './App.scss';
 
@@ -19,6 +19,7 @@ export default class App extends Component {
         super(props);
 
         this.storyCount = 0;
+        this.scrollContainer = null;
         
         this.state = {
             domain: 'a',
@@ -41,17 +42,15 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        const scrollContainer = document.querySelector('.mdl-layout__content');
+        this.scrollContainer = document.querySelector('.mdl-layout__content');
 
         this.getDomain();
-        scrollContainer.addEventListener('scroll', this.handleScroll, false);
+        this.scrollContainer.addEventListener('scroll', this.handleScroll, false);
     }
 
     componentWillUnmount() {
-        const scrollContainer = document.querySelector('.mdl-layout__content');
-
         // Remove the event listener when we leave this page/component.
-        scrollContainer.removeEventListener('scroll', this.handleScroll, false);
+        this.scrollContainer.removeEventListener('scroll', this.handleScroll, false);
     }
 
     /**
@@ -78,10 +77,7 @@ export default class App extends Component {
      * Fetches the stories from our mongo collection.
      */
     fetchStories = () => {
-        this.setState({ isFetching: true });
-
-        console.log('domain: ', this.state.domain);
-
+        console.log('fetching');
         // Creates the request for the new list of stories.
         fetch(`/stories/${this.state.domain}/${this.state.storyIndexLower}/${this.state.storyIndexUpper}`)
         .then((response) => {
@@ -149,16 +145,13 @@ export default class App extends Component {
      */
     getDomain = () => {
         const origin = location.origin;
+        const isHigh = origin.includes('high');
+        const isDrunk = origin.includes('drunk');
 
-        console.log('origin: ', origin);
-
-        if (origin.includes('drunk')) {
-            this.setState({ domain: 'drunk' }, this.fetchStories);  
-        } else if (origin.includes('high')) { 
-            this.setState({ domain: 'high' }, this.fetchStories);
-        } else {
-            this.fetchStories();
-        }
+        this.setState({
+            domain: isDrunk ? 'drunk' : (isHigh ? 'high' : 'a'),
+            isFetching: true
+        }, this.fetchStories());
     }
 
     /**
@@ -179,17 +172,17 @@ export default class App extends Component {
         const documentHeight = document.querySelector('.mdl-layout__content > .wrapper').offsetHeight;
         const scrollDistance = scrollOffset + window.innerHeight;
 
-        if (scrollOffset > 100 && !this.state.shouldScrollButtonBeVisible) {
+        if (scrollOffset > SCROLL_BUFFER && !this.state.shouldScrollButtonBeVisible) {
             this.setState({ shouldScrollButtonBeVisible: true });
         } 
 
-        if (scrollOffset <= 100 && this.state.shouldScrollButtonBeVisible) {
+        if (scrollOffset <= SCROLL_BUFFER && this.state.shouldScrollButtonBeVisible) {
             this.setState({ shouldScrollButtonBeVisible: false });
         }
 
         if (scrollDistance > documentHeight && !this.state.isFetching &&
             this.state.filteredStories.length < this.storyCount) {
-            this.fetchStories();
+            this.setState({ isFetching: true }, this.fetchStories);
         }
     }, 100);
 
@@ -274,8 +267,6 @@ export default class App extends Component {
         let upload = request.post(UPLOAD_URL)
              .field('upload_preset', UPLOAD_PRESET)
              .field('file', this.state.storyImage);
-
-        consle.log('upload: ', upload);
 
         upload.end((err, response) => {
             if (err) console.error(err);

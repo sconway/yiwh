@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import Dropzone from 'react-dropzone';
+import Spinner from 'components/Spinner/Spinner';
 import './ImageUploader.scss';
 
 
@@ -80,13 +81,7 @@ export default class ImageUploader extends Component {
                     }}
                 </Dropzone>
 
-                {this.state.didImageDrop && !this.state.didImageLoad && (
-                    <div className='image-uploader__loader'>
-                        <svg className='circular' viewBox='25 25 50 50'>
-                            <circle className='path' cx='50' cy='50' r='20' fill='none' stroke-width='2' stroke-miterlimit='10'/>
-                        </svg>
-                    </div>
-                )}
+                {this.state.didImageDrop && !this.state.didImageLoad && <Spinner />}
 
                 {this.state.imagePreview && (
                     <div>

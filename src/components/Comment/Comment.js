@@ -7,7 +7,7 @@ import './Comment.scss';
 const Comment = (props) => {
     const date = props.date ? new Date(props.date) : defaultDate;
     const formattedDate = date.toDateString();
-    const commentClasses = classNames('comment mdl-shadow--4dp', {
+    const commentClasses = classNames('comment', {
         'visible': props.shouldCommentsShow
     });
 

@@ -27,7 +27,6 @@ export default class CommentBox extends Component {
      * to reflect this, if it has not already.
      */
      handleOnline = () => {
-        console.log('back online');
         if (this.state.isOffline) this.setState({ isOffline: false });
      }
 
@@ -36,7 +35,6 @@ export default class CommentBox extends Component {
      * there is no connection, or invokes the callback to validate the story.
      */
      onSubmit = () => {
-        console.log('submitting: ', navigator.onLine);
         if (!navigator.onLine) {
             this.setState({ isOffline: true });
         } else {
@@ -69,10 +67,10 @@ export default class CommentBox extends Component {
                     {this.state.isOffline && <p className='error-message'>{connectionErrorMessage}</p>}
 
                     <button 
-                         className='comment-box__add-comment mdl-button mdl-button--fab mdl-button--colored  mdl-button--primary mdl-js-button mdl-js-ripple-effect'
+                         className='comment-box__add-comment mdl-js-ripple-effect'
                          onClick={this.onSubmit}
                     >
-                         <i className='material-icons'>add</i>
+                        post
                     </button>
                </article>
           );
