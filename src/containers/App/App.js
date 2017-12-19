@@ -42,6 +42,7 @@ export default class App extends Component {
     }
 
     componentDidMount() {
+        console.log('MOUNTED');
         this.scrollContainer = document.querySelector('.mdl-layout__content');
 
         this.getDomain();
@@ -77,7 +78,7 @@ export default class App extends Component {
      * Fetches the stories from our mongo collection.
      */
     fetchStories = () => {
-        console.log('fetching');
+        console.log('FETCHING: ', this.state.storyIndexLower, this.state.storyIndexUpper);
         // Creates the request for the new list of stories.
         fetch(`/stories/${this.state.domain}/${this.state.storyIndexLower}/${this.state.storyIndexUpper}`)
         .then((response) => {
@@ -147,6 +148,8 @@ export default class App extends Component {
         const origin = location.origin;
         const isHigh = origin.includes('high');
         const isDrunk = origin.includes('drunk');
+
+        console.log('DOMAIN IS: ', isDrunk ? 'drunk' : (isHigh ? 'high' : 'a'));
 
         this.setState({
             domain: isDrunk ? 'drunk' : (isHigh ? 'high' : 'a'),

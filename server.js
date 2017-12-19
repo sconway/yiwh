@@ -105,9 +105,14 @@ const handleStoryRequests = () => {
   // supplied start and end index. Skips to the start 
   // index and stops at the end index. 
   expressApp.get('/stories/:domain/:startIndex/:endIndex', (req, res) => {
+    console.log('DOMAIN PARAMETER: ', req.params.domain);
     const startIndex = parseInt(req.params.startIndex);
     const endIndex = parseInt(req.params.endIndex);
     const domain = req.params.domain.length > 1 ? {mindState: req.params.domain} : {};
+
+    console.log('DOMAIN: ', domain);
+    console.log('START INDEX: ', startIndex);
+    console.log('END INDEX: ', endIndex);
 
     db.collection('stories').find(domain).count().then((count) => {
       storyCount = count;
@@ -121,7 +126,7 @@ const handleStoryRequests = () => {
       .limit(endIndex)
       .sort({ 'points': -1 })
       .toArray((err, results) => {
-        console.log('storyCount: ', storyCount);
+        console.log('RESULTS: ', results);
         res.send({stories: results, count: storyCount});
       });
   });
