@@ -80,10 +80,12 @@
       padding: 15px 45px 15px 15px;
     }
 
-    &:placeholder {
-      transition: color $base-transition-time ease-in-out;
+    &::placeholder {
+      transition: color 200ms ease-in-out;
+    }
 
-      &:focus {
+    &:focus {
+      &::placeholder {
         color: transparent;
       }
     }

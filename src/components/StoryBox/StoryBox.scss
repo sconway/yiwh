@@ -79,8 +79,16 @@
     transition: border-color 500ms ease-in-out;
     z-index: 1;
 
+    &::placeholder {
+      transition: color 200ms ease-in-out;
+    }
+
     &:focus {
       border-color: $primary;
+
+      &::placeholder {
+        color: transparent;
+      }
     }
   }
 

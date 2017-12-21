@@ -122,9 +122,9 @@ const handleStoryRequests = () => {
     // an array and sends them back to the client.
     db.collection('stories')
       .find(domain)
+      .sort({ 'points': -1 })
       .skip(startIndex)
       .limit(endIndex)
-      .sort({ 'points': -1 })
       .toArray((err, results) => {
         console.log('RESULTS: ', results);
         res.send({stories: results, count: storyCount});

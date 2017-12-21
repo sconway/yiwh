@@ -72,10 +72,12 @@ export default class StoryBox extends Component {
 
                     {this.props.shouldErrorMessageShow && <p className='error-message'>{errorMessage}</p>}
 
-                    <RadioButtons 
-                        handleRadioButtonSelection={this.props.handleRadioButtonSelection} 
-                        mindState={this.props.mindState}
-                    />
+                    {this.props.domain.length < 2 && (
+                        <RadioButtons 
+                            handleRadioButtonSelection={this.props.handleRadioButtonSelection} 
+                            mindState={this.props.mindState}
+                        />
+                    )}
 
                     <ImageUploader
                         domain={this.props.domain} 
