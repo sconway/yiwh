@@ -3,8 +3,10 @@
 
 .story__footer {
   align-items: center;
+  border-top: $brutalist-border;
   display: flex;
   font-size: 16px;
+  padding-top: 20px;
   justify-content: space-between;
 
   .story__comment-toggle {
