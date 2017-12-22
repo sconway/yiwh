@@ -124,7 +124,7 @@ const handleStoryRequests = () => {
       .find(domain)
       .sort({ 'points': -1 })
       .skip(startIndex)
-      .limit(endIndex)
+      .limit(endIndex - startIndex)
       .toArray((err, results) => {
         console.log('RESULTS: ', results);
         res.send({stories: results, count: storyCount});
