@@ -74,6 +74,13 @@ export default class App extends Component {
         });
     }
 
+    checkVisible = (el) => {
+        const rect = el.getBoundingClientRect();
+        const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+
+        return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+    }
+
     /**
      * Fetches the stories from our mongo collection.
      */
@@ -171,6 +178,7 @@ export default class App extends Component {
      * more stories.
      */
     handleScroll = throttle(() => {
+        const storyBox = document.querySelector('.story-box');
         const scrollOffset = document.querySelector('.mdl-layout__content').scrollTop;
         const documentHeight = document.querySelector('.mdl-layout__content > .wrapper').offsetHeight;
         const scrollDistance = scrollOffset + window.innerHeight;
@@ -187,6 +195,11 @@ export default class App extends Component {
             this.state.filteredStories.length < this.storyCount) {
             this.setState({ isFetching: true }, this.fetchStories);
         }
+
+        if (storyBox && !this.checkVisible(storyBox) && this.state.shouldStoryboxShow) {
+            this.setState({ shouldStoryboxShow: false });
+        }
+
     }, 100);
 
     /**
