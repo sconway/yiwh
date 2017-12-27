@@ -45,7 +45,7 @@ export default class App extends Component {
         console.log('MOUNTED');
         this.scrollContainer = document.querySelector('.mdl-layout__content');
 
-        this.getDomain();
+        this.setDomain();
         this.scrollContainer.addEventListener('scroll', this.handleScroll, false);
     }
 
@@ -85,7 +85,6 @@ export default class App extends Component {
      * Fetches the stories from our mongo collection.
      */
     fetchStories = () => {
-        console.log('FETCHING: ', this.state.storyIndexLower, this.state.storyIndexUpper);
         // Creates the request for the new list of stories.
         fetch(`/stories/${this.state.domain}/${this.state.storyIndexLower}/${this.state.storyIndexUpper}`)
         .then((response) => {
@@ -148,20 +147,14 @@ export default class App extends Component {
     }
 
     /**
-     * Called on component mount. Checks the origin and sets the 
-     * class variable if it is one of the special origins.
+     * Returns the mindstate that should be saved with a posted story.
      */
-    getDomain = () => {
-        const origin = location.origin;
-        const isHigh = origin.includes('high');
-        const isDrunk = origin.includes('drunk');
-
-        console.log('DOMAIN IS: ', isDrunk ? 'drunk' : (isHigh ? 'high' : 'a'));
-
-        this.setState({
-            domain: isDrunk ? 'drunk' : (isHigh ? 'high' : 'a'),
-            isFetching: true
-        }, this.fetchStories);
+    getMindState = () => {
+        if (this.state.domain.length > 1) {
+            return this.state.domain;
+        } else {
+            return this.state.mindState;
+        }
     }
 
     /**
@@ -238,6 +231,21 @@ export default class App extends Component {
     }
 
     /**
+     * Called on component mount. Checks the origin and sets the 
+     * class variable if it is one of the special origins.
+     */
+    setDomain = () => {
+        const origin = location.origin;
+        const isHigh = origin.includes('high');
+        const isDrunk = origin.includes('drunk');
+
+        this.setState({
+            domain: isDrunk ? 'drunk' : (isHigh ? 'high' : 'a'),
+            isFetching: true
+        }, this.fetchStories);
+    }
+
+    /**
      * Called when the search term in the search box is updated.
      * updates the shown stories to match the entered term
      */
@@ -304,7 +312,7 @@ export default class App extends Component {
         let newStory = {
             comments: [],
             date: Date.now(),
-            mindState: this.state.mindState,
+            mindState: this.getMindState(),
             points: 0,
             story: this.state.story,
             storyImageUrl: null

@@ -25,7 +25,11 @@ const ScrollButton = (props) => {
 
         const scrollInterval = setInterval(() => {
             if (container.scrollTop != 0) {
-                container.scrollBy(0, scrollStep );
+                if (container.scrollBy) {
+                    container.scrollBy(0, scrollStep );
+                } else {
+                    container.scrollTop = 0;
+                }
             } else {
                 clearInterval(scrollInterval); 
             }
