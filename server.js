@@ -1,8 +1,13 @@
+const dataHandlers = require('./utils/dataHandlers');
 const express = require('express');
 const webpack = require('webpack');
 const path = require('path');
+const fileSync = require('fs');
 const helmet = require('helmet');
+const outputErrors = require('./utils/outputErrors');
+const request = require('superagent');
 const requireFromString = require('require-from-string');
+const routeHandlers = require('./utils/routeHandlers');
 const MemoryFS = require('memory-fs');
 const serverConfig = require('./config/server.production.js');
 const sslRedirect = require('heroku-ssl-redirect');
@@ -10,32 +15,15 @@ const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 const RateLimit = require('express-rate-limit');
+const Twitter = require('twitter');
 const expressApp = express();
 const fs = new MemoryFS();
 const PORT = process.env.PORT || 1243;
-let db, storyCount;
+const TWEET_POINT_THRESHOLD = 10;
+let db, storyCount, defaultTwitterClient, drunkTwitterClient, highTwitterClient;
 
 console.log('COMPILING BUNDLE...');
 const serverCompiler = webpack(serverConfig);
-
-/**
- * Used to output more detailed messages if the server confiler
- * fails.
- */
-const outputErrors = (err, stats) => {
-  if (err) {
-    console.error(err.stack || err);
-
-    if (err.details) console.error(err.details);
-
-    return;
-  }
-
-  const info = stats.toJson();
-
-  if (stats.hasErrors()) console.error(info.errors);
-  if (stats.hasWarnings()) console.warn(info.warnings);
-}
 
 /**
  * Connects to the mondgo DB and listens for requests.
@@ -43,38 +31,28 @@ const outputErrors = (err, stats) => {
 const connectToDb = () => {
   // Use the connection string to connect to the Database and
   // setup the listener on the defined port.
-  MongoClient.connect(process.env.connectionString, (err, database) => {
-    if (err) {
-      console.log('MONGO CONNECTION ERROR: ', err);
-      return;
-    }
+  return new Promise((resolve, reject) => {
+    MongoClient.connect(process.env.connectionString, (error, database) => {
+      if (error) reject(error);
 
-    db = database;
-
-    expressApp.listen(PORT, () => {
-      console.log('EXPRESS SERVER IS LISTENING ON PORT: ', PORT);
+      expressApp.listen(PORT, () => {
+        console.log('EXPRESS SERVER IS LISTENING ON PORT: ', PORT);
+        resolve(database);
+      });
     });
   });
 }
 
 /**
- * POST handler for saving comments to the various stories.
+ * Returns the proper twitter client for the given mindstate.
+ *
+ * @param {String} : mindState
  */
-const handleCommentPosts= () => {
-  expressApp.post('/comments', (req, res) => {
-    const validRegExp = new RegExp(/^[\w\-\,\.\(\)\/\!\$\?\:\;\'\"\s]+$/);
-
-    // If the comment is valid, update the comments
-    // array of the story that it's for.
-    if (validRegExp.test(req.body.comment)) {
-      db.collection('stories').update(
-        { _id: ObjectID(req.body.storyID) },
-        { $push: { comments: req.body } }
-      );
-
-      res.redirect('/');
-    }
-  });
+const getTwitterClient = (mindState) => {
+  console.log('GETTING TWITTER CLIENT. MINDSTATE IS: ', mindState);
+  if (mindState === 'drunk') return drunkTwitterClient;
+  else if (mindState === 'high') return highTwitterClient;
+  else return null;
 }
 
 /**
@@ -82,76 +60,22 @@ const handleCommentPosts= () => {
  */
 const handlePointUpdates = () => {
   expressApp.post('/updatePoints', (req, res) => {
-    // Finds the item in the collection that has the supplied
-    // ID and updates its points value with the supplied value.
-    db.collection('stories').update(
-      { _id: ObjectID(req.body.storyID) },
-      { $set: 
-        { 
-          'points': req.body.points
-        }
-      }
-    );
+    const {points, story, storyID} = req.body;
+
+    // Update the document with the new amount of points. 
+    dataHandlers.setStoryPoints(db, storyID, points);
+
+    // Find the story based on the ID and see whether of not we should post it.
+    db.collection('stories')
+      .find(ObjectID(storyID))
+      .forEach((story) => {
+        // Post the tweet if it has enough points and hasn't been posted already.
+        if (!story.hasBeenPosted && points > TWEET_POINT_THRESHOLD) 
+          updateTweetBeforePosting(story.story, storyID, story.mindState, 
+            story.storyImageUrl, getTwitterClient(story.mindState));
+      });
 
     res.redirect('/');
-  });
-}
-
-/**
- * GET handler for stories requests.
- */
-const handleStoryRequests = () => {
-  // Handles requests to the stories collection with the 
-  // supplied start and end index. Skips to the start 
-  // index and stops at the end index. 
-  expressApp.get('/stories/:domain/:startIndex/:endIndex', (req, res) => {
-    console.log('DOMAIN PARAMETER: ', req.params.domain);
-    const startIndex = parseInt(req.params.startIndex);
-    const endIndex = parseInt(req.params.endIndex);
-    const domain = req.params.domain.length > 1 ? {mindState: req.params.domain} : {};
-
-    console.log('DOMAIN: ', domain);
-    console.log('START INDEX: ', startIndex);
-    console.log('END INDEX: ', endIndex);
-
-    db.collection('stories').find(domain).count().then((count) => {
-      storyCount = count;
-    });
-
-    // Finds all the stories in the collection, sorts them into
-    // an array and sends them back to the client.
-    db.collection('stories')
-      .find(domain)
-      .sort({ 'points': -1 })
-      .skip(startIndex)
-      .limit(endIndex - startIndex)
-      .toArray((err, results) => {
-        console.log('RESULTS: ', results);
-        res.send({stories: results, count: storyCount});
-      });
-  });
-}
-
-/**
- * POST handler to save stories to the mongo collection.
- */
-const handleStoryUpdates = () => {
-  expressApp.post('/stories', (req, res) => {
-    const validRegExp = new RegExp(/^[\w\-\,\.\(\)\/\!\$\?\:\;\'\"\s]+$/);
-
-    // If the story is valid, update the stories
-    // collection with the new story.
-    if (validRegExp.test(req.body.story)) {
-      db.collection('stories').insert(req.body, (err, result) => {
-        if (err) {
-          console.log('ERROR POSTING: ', err);
-          return;
-        }
-
-        res.redirect('/');
-      });
-    }
-
   });
 }
 
@@ -170,6 +94,11 @@ const initServerOptions = () => {
 
   expressApp.enable('trust proxy');
   expressApp.use(express.static(path.join(__dirname)));
+  expressApp.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
   expressApp.use(bodyParser.json());
   expressApp.use(bodyParser.urlencoded({extended: true}));
   expressApp.use(sslRedirect());
@@ -181,16 +110,194 @@ const initServerOptions = () => {
 }
 
 /**
+ * Initialize our twitter object so we can update the twitter 
+ * account with popular tweets.
+ */
+const initTwitterAPI = () => {
+  defaultTwitterClient = new Twitter({
+    consumer_key: process.env.CONSUMER_KEY,
+    consumer_secret: process.env.CONSUMER_SECRET,
+    access_token_key: process.env.ACCESS_TOKEN_KEY,
+    access_token_secret: process.env.ACCESS_TOKEN_SECRET
+  });
+
+  drunkTwitterClient = new Twitter({
+    consumer_key: process.env.DRUNK_CONSUMER_KEY,
+    consumer_secret: process.env.DRUNK_CONSUMER_SECRET,
+    access_token_key: process.env.DRUNK_ACCESS_TOKEN_KEY,
+    access_token_secret: process.env.DRUNK_ACCESS_TOKEN_SECRET
+  });
+
+  highTwitterClient = new Twitter({
+    consumer_key: process.env.HIGH_CONSUMER_KEY,
+    consumer_secret: process.env.HIGH_CONSUMER_SECRET,
+    access_token_key: process.env.HIGH_ACCESS_TOKEN_KEY,
+    access_token_secret: process.env.HIGH_ACCESS_TOKEN_SECRET
+  });
+}
+
+/**
+ * Creates a POST request to send the specified tweet.
+ *
+ * @param {Object} : twitterClient 
+ * @param {String} : tweet 
+ * @param {String} : id 
+ * @param {Function} : callBack 
+ */
+const postTweet = (twitterClient, tweet, id, callBack) => {
+  // Make the post request, and handle the returned promise.
+  twitterClient.post('statuses/update', tweet)
+    .then(() => {
+      console.log('SUCCESSFUL POST');
+      if (callBack) callBack(id);
+    })
+    .catch((error) => {
+      console.log('ERROR POSTING TWEET: ', error)
+    });
+}
+
+/**
+ * Called for tweets that contain media. Posts the tweet along with the image.
+ *
+ * @param {String} : tweet
+ * @param {String} : id
+ * @param {String} : mindState
+ * @param {String} : imageURL
+ * @param {Object} : twitterClient
+ */
+const postTweetWithImage = (tweet, id, mindState, imageURL, twitterClient) => {
+  let mediaData, mediaSize, mediaType;
+
+  // Gets the image from the third party hosting site,
+  // and kicks of the process of uploading and posting it.
+  request
+    .get(imageURL)
+    .end((error, response) => {
+      mediaData = response.body;
+      mediaSize = response.headers['content-length'];
+      mediaType = response.headers['content-type'];
+
+      initUpload() // Declare that you wish to upload some media
+        .then(appendUpload) // Send the data for the media
+        .then(finalizeUpload) // Declare that you are done uploading chunks
+        .then(mediaId => {
+          const newTweet = {
+            status: tweet,
+            media_ids: mediaId
+          };
+
+          // If there is a specified Twitter client, post using that.
+          if (twitterClient) postTweet(twitterClient, newTweet);
+          // Otherwise, post to the default cliend and mark the tweet as posted.
+          else postTweet(defaultTwitterClient, newTweet, id, setTweetPosted);
+        });
+    });
+
+  /**
+   * Step 1 of 3: Initialize a media upload.
+   */
+  const initUpload = () => {
+    return makePost('media/upload', {
+      command    : 'INIT',
+      total_bytes: mediaSize,
+      media_type : mediaType,
+    }).then(data => data.media_id_string);
+  }
+
+  /*
+   * Step 2 of 3: Append file chunk
+   *
+   * @param {String} mediaId
+   */
+  const appendUpload = (mediaId) => {
+    return makePost('media/upload', {
+      command      : 'APPEND',
+      media_id     : mediaId,
+      media        : mediaData,
+      segment_index: 0
+    }).then(data => mediaId);
+  }
+
+  /**
+   * Step 3 of 3: Finalize upload
+   *
+   * @param {String} mediaId
+   */
+  const finalizeUpload = (mediaId) => {
+    return makePost('media/upload', {
+      command : 'FINALIZE',
+      media_id: mediaId
+    }).then(data => mediaId);
+  }
+
+  /**
+   * (Utility function) Send a POST request to the Twitter API
+   *
+   * @param {String} endpoint
+   * @param {Object} params 
+   */
+  const makePost = (endpoint, params) => {
+    return new Promise((resolve, reject) => {
+      const client = twitterClient || defaultTwitterClient;
+
+      client.post(endpoint, params, (error, data, response) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(data);
+        }
+      });
+    });
+  }
+}
+
+/**
+ * Creates a POST request to send the specified tweet. Decides
+ * what account to post to based on the current domain.
+ * 
+ * @param {String} : tweet
+ * @param {String} : id
+ * @param {String} : mindState
+ * @param {String} : imageURL
+ * @param {Object} : twitterClient
+ */
+const updateTweetBeforePosting = (tweet, id, mindState, imageURL, twitterClient) => {
+  if (mindState === 'drunk' || mindState === 'high') 
+    tweet = tweet + ' #yesiwas' + mindState;
+
+  if (imageURL) {
+    // If there is a specified Twitter client, post using that.
+    if (twitterClient) postTweetWithImage(tweet, id, mindState, imageURL, twitterClient);
+    // Post with the default Twitter client, regardless.
+    postTweetWithImage(tweet, id, mindState, imageURL);
+  } else {    
+    // If there is a specified Twitter client, post using that.
+    if (twitterClient) postTweet(twitterClient, {status: tweet});
+    // Post with the default Twitter client, regardless.
+    postTweet(defaultTwitterClient, {status: tweet}, id, dataHandlers.setTweetPosted(db, id));
+  }
+}
+
+/**
  * Runs the webpack code that was compiled and loaded
  * into memory, then calls our server functions.
  */
 serverCompiler.outputFileSystem = fs;
 serverCompiler.run((err, stats) => {
-  outputErrors(err, stats);
+  outputErrors.outputErrors(err, stats);
   initServerOptions();
-  connectToDb();
-  handleCommentPosts();
-  handlePointUpdates();
-  handleStoryRequests();
-  handleStoryUpdates();
+  initTwitterAPI();
+
+  connectToDb()
+    .then((database) => {
+      db = database;
+
+      routeHandlers.handleCommentPosts(expressApp, db);
+      handlePointUpdates();
+      routeHandlers.handleStoryRequests(expressApp, db);
+      routeHandlers.handleStoryUpdates(expressApp, db);
+    })
+    .catch((error) => {
+      console.log('ERROR CONNECTING TO THE DATABASE: ', error);
+    });
 });

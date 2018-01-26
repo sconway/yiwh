@@ -42,7 +42,6 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        console.log('MOUNTED');
         this.scrollContainer = document.querySelector('.mdl-layout__content');
 
         this.setDomain();
@@ -74,6 +73,12 @@ export default class App extends Component {
         });
     }
 
+    /**
+     * Returns a boolean value depending on whether or not the supplied
+     * node is visible on the user's screen.
+     *
+     * @param {DOM Node} : el
+     */
     checkVisible = (el) => {
         const rect = el.getBoundingClientRect();
         const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
@@ -200,11 +205,9 @@ export default class App extends Component {
      * Sets the state to show or hide the story box.
      */
     handleStoryBoxToggle = () => {
-        this.setState((prevState) => {
-            return {
-                shouldStoryboxShow: !prevState.shouldStoryboxShow
-            };
-        });
+        this.setState((prevState) => ({
+            shouldStoryboxShow: !prevState.shouldStoryboxShow
+        }));
     }    
 
     /**
@@ -293,7 +296,9 @@ export default class App extends Component {
              .field('file', this.state.storyImage);
 
         upload.end((err, response) => {
-            if (err) console.error(err);
+            if (err) {
+                console.error('ERROR UPLOADING IMAGE: ', err);
+            }
 
             // If we got a good response, update new story with
             // the url for the image to be used later.
@@ -312,6 +317,7 @@ export default class App extends Component {
         let newStory = {
             comments: [],
             date: Date.now(),
+            hasBeenPosted: false,
             mindState: this.getMindState(),
             points: 0,
             story: this.state.story,

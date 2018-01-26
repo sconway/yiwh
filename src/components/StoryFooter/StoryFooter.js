@@ -5,7 +5,11 @@ import './StoryFooter.scss';
 const StoryFooter = (props) => {
     return (
         <section className='story__footer'>
-            <Counter points={props.points} storyID={props.storyID} />
+            <Counter 
+              points={props.points} 
+              story={props.story}
+              storyID={props.storyID} 
+            />
 
             <a className='story__comment-toggle' onClick={props.toggleComments}>
                 Comments 

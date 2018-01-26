@@ -17,7 +17,7 @@ const ScrollButton = (props) => {
      * Scrolls the page to the top in an animated fasion. Adapted from:
      * https://stackoverflow.com/questions/21474678/scrolltop-animation-without-jquery
      *
-     * @param     {Integer} scrollDuration
+     * @param {Integer} scrollDuration
      */
     const scrollToTop = (scrollDuration) => {
         let container = document.querySelector('.mdl-layout__content'),

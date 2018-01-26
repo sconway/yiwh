@@ -172,6 +172,7 @@ export default class Story extends PureComponent {
                         <StoryFooter 
                             numComments={this.state.comments.length} 
                             points={this.props.points} 
+                            story={this.props.story}
                             storyID={this.props.storyID} 
                             toggleComments={this.toggleComments}
                         />

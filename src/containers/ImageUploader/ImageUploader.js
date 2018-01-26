@@ -35,7 +35,7 @@ export default class ImageUploader extends Component {
      * Called when an image is dropped in the uploader. Makes sure there is
      * a file to be uploaded, and sets the state with it.
      *
-     * @param      {Array} : files
+     * @param {Array} : files
      */
     onImageDrop = (files) => {
         if (files.length > 0) {

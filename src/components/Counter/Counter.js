@@ -49,6 +49,7 @@ export default class Counter extends Component {
     postData = () => {
         const pointUpdate = {
             points: this.state.points,
+            story: this.props.story,
             storyID: this.props.storyID
         };
 
