@@ -60,17 +60,15 @@ export default class App extends Component {
      * @param {Object} newStory
      */
     addStory = (newStory) => {
-        this.setState((prevState) => {
-            return {
-                filteredStories: [newStory, ...prevState.filteredStories],
-                isPosted: true,
-                isPosting: false,
-                isValidStory: false,
-                mindState: 'neither',
-                stories: [newStory, ...prevState.stories],
-                story: ''
-            };
-        });
+        this.setState((prevState) => ({
+            filteredStories: [newStory, ...prevState.filteredStories],
+            isPosted: true,
+            isPosting: false,
+            isValidStory: false,
+            mindState: 'neither',
+            stories: [newStory, ...prevState.stories],
+            story: ''
+        }));
     }
 
     /**
@@ -155,11 +153,7 @@ export default class App extends Component {
      * Returns the mindstate that should be saved with a posted story.
      */
     getMindState = () => {
-        if (this.state.domain.length > 1) {
-            return this.state.domain;
-        } else {
-            return this.state.mindState;
-        }
+        return this.state.domain.length > 1 ? this.state.domain : this.state.mindState;
     }
 
     /**
@@ -214,7 +208,7 @@ export default class App extends Component {
      * Constructs the story based on the current values and
      * posts our form data to the server.
      *
-     * @param     {Object} : newStory
+     * @param {Object} : newStory
      */
     postData = (newStory) => {
         fetch('/stories', {
@@ -280,7 +274,7 @@ export default class App extends Component {
      * Called when an image is dropped into the uploader. Sets the state
      * with the url dropped/uploaded image.
      *
-     * @param     { Object } : file
+     * @param { Object } : file
      */
     updateStoryImage = (file) => this.setState({ storyImage: file });
 
@@ -291,22 +285,20 @@ export default class App extends Component {
      * @param {Object} newStory
      */
     uploadAndPost = (newStory) => {
-        let upload = request.post(UPLOAD_URL)
-             .field('upload_preset', UPLOAD_PRESET)
-             .field('file', this.state.storyImage);
+        request
+            .post(UPLOAD_URL)
+            .field('upload_preset', UPLOAD_PRESET)
+            .field('file', this.state.storyImage)
+            .end((error, response) => {
+                if (error) console.error('ERROR UPLOADING IMAGE: ', error);
 
-        upload.end((err, response) => {
-            if (err) {
-                console.error('ERROR UPLOADING IMAGE: ', err);
-            }
+                // If we got a good response, update new story with
+                // the url for the image to be used later.
+                if (response.body.secure_url !== '')
+                    newStory.storyImageUrl = response.body.secure_url;
 
-            // If we got a good response, update new story with
-            // the url for the image to be used later.
-            if (response.body.secure_url !== '')
-                newStory.storyImageUrl = response.body.secure_url;
-
-            this.postData(newStory);
-        });
+                this.postData(newStory);
+            });
     }
 
     /**

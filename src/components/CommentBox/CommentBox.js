@@ -67,7 +67,7 @@ export default class CommentBox extends Component {
                     {this.state.isOffline && <p className='error-message'>{connectionErrorMessage}</p>}
 
                     <button 
-                         className='comment-box__add-comment mdl-js-ripple-effect'
+                         className='comment-box__add-comment'
                          onClick={this.onSubmit}
                     >
                         post

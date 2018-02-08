@@ -32,7 +32,7 @@ const connectToDb = () => {
   // Use the connection string to connect to the Database and
   // setup the listener on the defined port.
   return new Promise((resolve, reject) => {
-    MongoClient.connect(process.env.connectionString, (error, database) => {
+    MongoClient.connect(process.env.CONNECTION_STRING, (error, database) => {
       if (error) reject(error);
 
       expressApp.listen(PORT, () => {
@@ -189,7 +189,7 @@ const postTweetWithImage = (tweet, id, mindState, imageURL, twitterClient) => {
           // If there is a specified Twitter client, post using that.
           if (twitterClient) postTweet(twitterClient, newTweet);
           // Otherwise, post to the default cliend and mark the tweet as posted.
-          else postTweet(defaultTwitterClient, newTweet, id, setTweetPosted);
+          else postTweet(defaultTwitterClient, newTweet, id, dataHandlers.setTweetPosted(db, id));
         });
     });
 
