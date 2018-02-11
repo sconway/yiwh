@@ -1,3 +1,9 @@
 .comment-list {
+  & + .comment-box {
+    margin-top: 0;
 
+    &.visible {
+      margin-top: 5px;
+    }
+  }
 }

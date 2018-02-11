@@ -3,7 +3,7 @@
 
 button.scroll-button {
   background-color: $primary !important;
-  bottom: 50px;
+  bottom: 15px;
   box-shadow: 0 0 8px rgba(0,0,0,.18), 0 8px 16px rgba(0,0,0,.36);
   opacity: 0;
   pointer-events: none;
@@ -12,9 +12,9 @@ button.scroll-button {
   transition: all 250ms cubic-bezier(0.4, 0, 1, 1);
   z-index: 2;
 
-  @include for-tablet-portrait-up {
+  @include for-phone-up{
     bottom: 60px;
-    right: 40px;
+    right: 30px;
   }
 
   @include for-tablet-landscape-up {

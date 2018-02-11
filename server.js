@@ -49,7 +49,6 @@ const connectToDb = () => {
  * @param {String} : mindState
  */
 const getTwitterClient = (mindState) => {
-  console.log('GETTING TWITTER CLIENT. MINDSTATE IS: ', mindState);
   if (mindState === 'drunk') return drunkTwitterClient;
   else if (mindState === 'high') return highTwitterClient;
   else return null;
@@ -70,9 +69,10 @@ const handlePointUpdates = () => {
       .find(ObjectID(storyID))
       .forEach((story) => {
         // Post the tweet if it has enough points and hasn't been posted already.
-        if (!story.hasBeenPosted && points > TWEET_POINT_THRESHOLD) 
+        if (!story.hasBeenPosted && points > TWEET_POINT_THRESHOLD) {
           updateTweetBeforePosting(story.story, storyID, story.mindState, 
             story.storyImageUrl, getTwitterClient(story.mindState));
+        }
       });
 
     res.redirect('/');
@@ -292,8 +292,8 @@ serverCompiler.run((err, stats) => {
     .then((database) => {
       db = database;
 
-      routeHandlers.handleCommentPosts(expressApp, db);
       handlePointUpdates();
+      routeHandlers.handleCommentPosts(expressApp, db);
       routeHandlers.handleStoryRequests(expressApp, db);
       routeHandlers.handleStoryUpdates(expressApp, db);
     })
