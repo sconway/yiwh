@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import root from 'window-or-global';
 import classNames from 'classnames';
 import DebounceInput from 'react-debounce-input';
 import './CommentBox.scss';

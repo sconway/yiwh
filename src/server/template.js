@@ -7,8 +7,7 @@ export default (html) => `
         <title>Yes, I was...</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-        <meta name=”description” content=”Yes I was is a collection of short and funny stories about the things people do, feel, or think while impaired” />
-        <meta name="keywords" content="Yes I was,Yes I was high,Yes I was drunk,funny,stories,that,high,drunk,gifs,pictures,HTML,CSS,JavaScript,React,Node,Express">
+        <meta name=”description” content=”Yes I was Drunk and Yes I Was High are collections of short and funny stories or images about the things people do, feel, or think while impaired” />        <meta name="keywords" content="Yes I was,Yes I was high,Yes I was drunk,funny,stories,that,high,drunk,gifs,pictures,HTML,CSS,JavaScript,React,Node,Express">
         <meta name="author" content="Scripted Media">
         <link rel="manifest" href="/manifest.json">
         <link rel="icon" type="image/png" href="/favicon.png" />
