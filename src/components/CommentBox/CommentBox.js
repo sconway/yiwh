@@ -43,7 +43,7 @@ export default class CommentBox extends Component {
 
      render() {
           const connectionErrorMessage = 'There doesn\'t appear to be an Internet connection :(';
-          const errorMessage = "Stories must be at least 3 characters, without any special characters (%, <, *, &, etc.)";
+          const errorMessage = "Comments must be at least 3 characters, without any special characters (%, <, *, &, etc.)";
           const commentBoxClasses = classNames('comment-box', {
                'error': this.props.shouldErrorMessageShow,
                'visible': this.props.shouldCommentsShow
