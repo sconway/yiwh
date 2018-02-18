@@ -173,7 +173,7 @@ export default class App extends Component {
         const storyBox = document.querySelector('.story-box');
         const scrollOffset = document.querySelector('.mdl-layout__content').scrollTop;
         const documentHeight = document.querySelector('.mdl-layout__content > .wrapper').offsetHeight;
-        const scrollDistance = scrollOffset + window.innerHeight;
+        const scrollDistance = scrollOffset + window.innerHeight + 10;
 
         if (scrollOffset > SCROLL_BUFFER && !this.state.shouldScrollButtonBeVisible) {
             this.setState({ shouldScrollButtonBeVisible: true });
@@ -184,7 +184,8 @@ export default class App extends Component {
         }
 
         if (scrollDistance > documentHeight && !this.state.isFetching &&
-            this.state.filteredStories.length < this.storyCount) {
+            this.state.filteredStories.length < this.storyCount &&
+            this.state.filteredStories.length === this.state.stories.length) {
             this.setState({ isFetching: true }, this.fetchStories);
         }
 
