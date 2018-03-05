@@ -1,14 +1,38 @@
 import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
-import CommentBox from 'components/CommentBox/CommentBox';
-import CommentList from 'components/CommentList/CommentList';
-import StoryHeader from 'components/StoryHeader/StoryHeader';
-import StoryFooter from 'components/StoryFooter/StoryFooter';
-import { defaultDate } from 'global/js/helpers';
+import CommentBox from '../../components/CommentBox/CommentBox';
+import CommentList from '../../components/CommentList/CommentList';
+import StoryHeader from '../../components/StoryHeader/StoryHeader';
+import StoryFooter from '../../components/StoryFooter/StoryFooter';
+import { defaultDate } from '../../global/js/helpers';
 import './Story.scss';
 
-export default class Story extends PureComponent {
-    constructor(props) {
+// interface CommentType {
+//     comment: string;
+//     date: any;
+// };
+
+interface Props {
+    date: any;
+    comments: any;
+    mindState: string;
+    points: number;
+    story: string;
+    storyID: string;
+    storyImageUrl: string;
+};
+
+interface State {
+    comment: string;
+    comments: any;
+    didCommentPost: boolean;
+    isValidComment: boolean;
+    shouldCommentsShow: boolean;
+    shouldErrorMessageShow: boolean;
+};
+
+export default class Story extends PureComponent<Props, State> {
+    constructor(props:Props) {
         super(props);
         
         this.state = {
@@ -42,37 +66,27 @@ export default class Story extends PureComponent {
      * Computes the time that has elapsed since the provided date.
      */
     computeTimeSince = () => {
-        const date = this.props.date ? new Date(this.props.date) : defaultDate;
-        const seconds = Math.floor((new Date() - date) / 1000);
+        const date = this.props.date ? new Date(this.props.date) : defaultDate as any;
+        const seconds = Math.floor((new Date() as any - date) / 1000);
         let interval = Math.floor(seconds / 31536000);
 
-        if (interval > 1) {
-            return interval + ' years';
-        }
+        if (interval > 1) return interval + ' years';
 
         interval = Math.floor(seconds / 2592000);
 
-        if (interval > 1) {
-            return interval + ' months';
-        }
+        if (interval > 1) return interval + ' months';
 
         interval = Math.floor(seconds / 86400);
 
-        if (interval > 1) {
-            return interval + ' days';
-        }
+        if (interval > 1) return interval + ' days';
 
         interval = Math.floor(seconds / 3600);
 
-        if (interval > 1) {
-            return interval + ' hours';
-        }
+        if (interval > 1) return interval + ' hours';
 
         interval = Math.floor(seconds / 60);
 
-        if (interval > 1) {
-            return interval + ' minutes';
-        }
+        if (interval > 1) return interval + ' minutes';
 
         return Math.floor(seconds) + ' seconds';
     }
@@ -104,11 +118,9 @@ export default class Story extends PureComponent {
      * Toggles the visibility of the comments.
      */
     toggleComments = () => {
-        this.setState((prevState) => {
-            return {
+        this.setState((prevState) => ({
                 shouldCommentsShow: !prevState.shouldCommentsShow
-            };
-        });
+        }));
     }
 
     /**
@@ -187,8 +199,7 @@ export default class Story extends PureComponent {
                 )}
     
                 {!this.state.didCommentPost && (
-                    <CommentBox 
-                        comment={this.state.comment} 
+                    <CommentBox
                         shouldCommentsShow={this.state.shouldCommentsShow}
                         shouldErrorMessageShow={this.state.shouldErrorMessageShow}
                         validateComment={this.validateComment}

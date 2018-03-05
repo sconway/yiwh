@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import './ScrollButton.scss';
 
-const ScrollButton = (props) => {
+interface Props {
+    shouldBeVisible: boolean;
+};
+
+const ScrollButton = (props:Props) => {
     const buttonClasses = classNames('scroll-button mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--primary', {
         'visible': props.shouldBeVisible
     });
@@ -20,7 +24,7 @@ const ScrollButton = (props) => {
      * @param {Integer} scrollDuration
      */
     const scrollToTop = (scrollDuration) => {
-        let container = document.querySelector('.mdl-layout__content'),
+        let container = (document.querySelector('.mdl-layout__content') as HTMLElement),
             scrollStep = -container.scrollTop / (scrollDuration / 15);
 
         const scrollInterval = setInterval(() => {

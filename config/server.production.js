@@ -6,7 +6,7 @@ module.exports = {
 
     externals: [nodeExternals()],
 
-    entry: path.resolve(__dirname, '..', 'src/server/index.js'),
+    entry: path.resolve(__dirname, '..', 'src/server/index.tsx'),
 
     output: {
         path: path.resolve(__dirname, '..', 'dist'),
@@ -17,7 +17,7 @@ module.exports = {
     },
 
     resolve: {
-        extensions: ['.js', '.jsx'],
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
         modules: [
             path.join(__dirname, '../src'),
             "node_modules"
@@ -26,6 +26,10 @@ module.exports = {
 
     module: {
         rules: [
+            { 
+                test: /\.(ts|tsx)$/, 
+                loader: 'awesome-typescript-loader' 
+            },
             {
                 test: /\.jsx?$/,
                 loader: 'babel-loader',

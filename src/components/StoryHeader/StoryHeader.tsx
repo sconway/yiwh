@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import './StoryHeader.scss';
 
-const StoryHeader = (props) => {
+interface Props {
+    formattedDate: string;
+    mindState: string;
+};
+
+const StoryHeader = (props:Props) => {
     const emoji = props.mindState.toLowerCase() === 'high' ? `😑` : `🍺`;
 
     return (

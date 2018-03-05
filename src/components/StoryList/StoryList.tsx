@@ -1,9 +1,28 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import Story from 'containers/Story/Story';
+import Story from '../../containers/Story/Story';
 import './StoryList.scss';
 
-const StoryList = (props) => {
+interface CommentType {
+    comment: string;
+    date: string;
+};
+
+interface StoryType {
+    comments?: CommentType[];
+    date: string;
+    _id: string;
+    mindState: string;
+    points: number;
+    story: string;
+    storyImageUrl: string;
+};
+
+interface Props {
+    stories: StoryType[];
+};
+
+const StoryList = (props:Props) => {
     /**
      * Constructs the list of stories
      */

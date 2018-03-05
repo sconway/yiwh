@@ -2,14 +2,33 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import root from 'window-or-global'
 import classNames from 'classnames';
-import DebounceInput from 'react-debounce-input';
-import ImageUploader from 'containers/ImageUploader/ImageUploader';
-import RadioButtons from 'components/RadioButtons/RadioButtons';
-import Spinner from 'components/Spinner/Spinner';
+// import DebounceInput from 'react-debounce-input';
+import ImageUploader from '../../containers/ImageUploader/ImageUploader';
+import RadioButtons from '../../components/RadioButtons/RadioButtons';
+import Spinner from '../../components/Spinner/Spinner';
 import './StoryBox.scss';
 
-export default class StoryBox extends Component {
-    constructor(props) {
+interface Props {
+    domain: string;
+    handleRadioButtonSelection: any;
+    handleStoryBoxToggle: any;
+    isValidStory: boolean;
+    isPosting: boolean;
+    mindState: string;
+    shouldErrorMessageShow: boolean;
+    shouldStoryBoxShow: boolean;
+    storyImage: string;
+    updateStory: any;
+    updateStoryImage: any;
+    validateStory: any;
+};
+
+interface State {
+    isOffline: boolean;
+};
+
+export default class StoryBox extends Component<Props, State> {
+    constructor(props:Props) {
         super(props);
 
         this.state = {
@@ -47,7 +66,7 @@ export default class StoryBox extends Component {
         const errorMessage = 'Stories must be at least 10 characters, without any special characters (%, <, *, &, etc.)';
         const storyBoxClasses = classNames('story-box', {
             'error': this.props.shouldErrorMessageShow,
-            'has-image': this.props.storyImage,
+            'has-image': this.props.storyImage.length > 0,
             'invalid': !this.props.isValidStory,
             'is-posting': this.props.isPosting,
             'visible': this.props.shouldStoryBoxShow
@@ -60,12 +79,9 @@ export default class StoryBox extends Component {
                 </button>
 
                 <div className={storyBoxClasses}>
-                    <DebounceInput
+                    <textarea
                         className='story-box__story'
-                        debounceTimeout={500}
-                        element='textarea'
-                        name='story' 
-                        type='text'
+                        name='story'
                         onChange={this.props.updateStory}
                         placeholder='Tell us a funny story...'
                     />

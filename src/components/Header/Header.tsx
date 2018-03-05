@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import './Header.scss';
 
-const Header = (props) => {
+interface Props {
+    domain: string;
+    filterByDate: any;
+    filterByRating: any;
+    updateSearchTerm: any;
+};
+
+const Header = (props:Props) => {
     const showNewest = () => props.filterByDate(1);
     const showOldest = () => props.filterByDate(-1);
     const showLowestRated = () => props.filterByRating(-1);

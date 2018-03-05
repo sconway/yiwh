@@ -197,7 +197,7 @@ const postTweetWithImage = (tweet, id, mindState, imageURL, twitterClient) => {
  */
 const updateTweetBeforePosting = (tweet, id, mindState, imageURL, twitterClient) => {
   if (mindState === 'drunk' || mindState === 'high') 
-    tweet = `${tweet} #yesiwas${mindState} #yesiwas${mindstate}.com`;
+    tweet = `${tweet} #yesiwas${mindState} www.yesiwas${mindState}.com www.yesiwas.com`;
 
   if (imageURL) {
     // If there is a specified Twitter client, post using that.

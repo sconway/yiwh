@@ -2,7 +2,13 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './Drawer.scss';
 
-const Drawer = (props) => {
+interface Props {
+    domain: any;
+    filterByDate: any;
+    filterByRating: any;
+};
+
+const Drawer = (props: Props) => {
     const showNewest = () => props.filterByDate(1);
     const showOldest = () => props.filterByDate(-1);
     const showLowestRated = () => props.filterByRating(-1);

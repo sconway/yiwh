@@ -1,10 +1,20 @@
 import React, { Component } from 'react';
-import Comment from 'components/Comment/Comment';
+import Comment from '../../components/Comment/Comment';
 import './CommentList.scss';
 
-const CommentList = (props) => {
+interface Comment {
+    comment: string;
+    date: string;
+};
+
+interface Props {
+    comments: Comment[];
+    shouldCommentsShow: boolean;
+};
+
+const CommentList = (props: Props) => {
     /**
-     * Constructs the list of stories
+     * Constructs the list of comments
      */
     const buildCommentList = () => {
         return props.comments.map((comment, index) => {

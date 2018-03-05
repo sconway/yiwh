@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import './RadioButtons.scss';
 
-const RadioButtons = (props) => {
+interface Props {
+    handleRadioButtonSelection: any;
+    mindState: string;
+};
+
+const RadioButtons = (props:Props) => {
     /**
      * Called when a radio button is clicked. Sends
      * the selected value back to the parent.

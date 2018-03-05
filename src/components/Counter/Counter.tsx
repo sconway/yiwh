@@ -2,8 +2,20 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './Counter.scss';
 
-export default class Counter extends Component {
-    constructor(props) {
+interface Props {
+    points: number;    
+    story: string;
+    storyID: string;
+};
+
+interface State {
+    points: number;
+};
+
+export default class Counter extends Component<Props, State> {
+    private pointsChanged: number;
+
+    constructor(props:Props) {
         super(props);
 
         this.pointsChanged = 0;
@@ -20,11 +32,9 @@ export default class Counter extends Component {
         if (this.pointsChanged > -1) {
             this.pointsChanged--;
 
-            this.setState((prevState) => {
-                return {
-                    points: prevState.points - 1
-                }
-            }, this.postData);
+            this.setState((prevState) => ({
+                points: prevState.points - 1
+            }), this.postData);
         }
     }
 
@@ -35,11 +45,9 @@ export default class Counter extends Component {
         if (this.pointsChanged < 1) {
             this.pointsChanged++;
 
-            this.setState((prevState) => {
-                return {
-                    points: prevState.points + 1
-                }
-            }, this.postData);
+            this.setState((prevState) => ({
+                points: prevState.points + 1
+            }), this.postData);
         }
     }
 
@@ -88,6 +96,7 @@ export default class Counter extends Component {
                     >
                         <i className='material-icons'>add</i>
                     </button>
+
                     <button 
                         className='counter__buttons--minus'
                         onClick={this.decrementCount}

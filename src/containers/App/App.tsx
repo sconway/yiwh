@@ -1,23 +1,46 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import request from 'superagent';
-import Drawer from 'components/Drawer/Drawer';
-import Header from 'components/Header/Header';
-import Footer from 'components/Footer/Footer';
-import Message from 'components/Message/Message';
-import ScrollButton from 'components/ScrollButton/ScrollButton';
-import Spinner from 'components/Spinner/Spinner';
-import StoryBox from 'components/StoryBox/StoryBox';
-import StoryList from 'components/StoryList/StoryList';
-import { defaultDate, throttle } from 'global/js/helpers';
-import { RESULT_INCREMENTER, SCROLL_BUFFER, UPLOAD_PRESET, UPLOAD_URL } from 'global/js/config.js';
+import Drawer from '../../components/Drawer/Drawer';
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
+import Message from '../../components/Message/Message';
+import ScrollButton from '../../components/ScrollButton/ScrollButton';
+import Spinner from '../../components/Spinner/Spinner';
+import StoryBox from '../../components/StoryBox/StoryBox';
+import StoryList from '../../components/StoryList/StoryList';
+import { defaultDate, throttle } from '../../global/js/helpers';
+import { RESULT_INCREMENTER, SCROLL_BUFFER, UPLOAD_PRESET, UPLOAD_URL } from '../../global/js/config';
 import 'global/scss/reset.scss';
 import './App.scss';
 
-export default class App extends Component {
-    constructor(props) {
-        super(props);
+interface Props {};
 
+interface State {
+    domain: string;
+    filteredStories: any;
+    isFetching: boolean;
+    isFetched: boolean;
+    isPosted: boolean;
+    isPosting: boolean;
+    isValidStory: boolean;
+    mindState: string;
+    shouldScrollButtonBeVisible: boolean;
+    shouldErrorMessageShow: boolean;
+    shouldStoryboxShow: boolean;
+    story: string;
+    storyIndexLower: number;
+    storyIndexUpper: number;
+    stories: any,
+    storyImage: string;
+};
+
+export default class App extends Component<Props, State> {
+    scrollContainer: any;
+    storyCount: number;
+
+    constructor(props:Props) {
+        super(props);
         this.storyCount = 0;
         this.scrollContainer = null;
         
@@ -37,7 +60,7 @@ export default class App extends Component {
             storyIndexLower: 0,
             storyIndexUpper: RESULT_INCREMENTER,
             stories: [],
-            storyImage: null
+            storyImage: ''
         };
     }
 
@@ -121,7 +144,7 @@ export default class App extends Component {
      * @param     {Integer} : order
      */
     filterStoriesByDate = (order) => {
-        const newStories = this.state.filteredStories.sort((a,b) => {
+        const newStories = this.state.filteredStories.sort((a:any, b:any) => {
             const dateA = a.date || defaultDate;
             const dateB = b.date || defaultDate;
 
@@ -140,7 +163,7 @@ export default class App extends Component {
      * @param {Integer} : order
      */
     filterStoriesByRating = (order) => {
-        const newStories = this.state.filteredStories.sort((a,b) => {
+        const newStories = this.state.filteredStories.sort((a:any, b:any) => {
             // Turn your strings into dates, and then subtract them
             // to get a value that is either negative, positive, or zero.
             return order > 0 ?  b.points - a.points : a.points - b.points;
@@ -160,7 +183,7 @@ export default class App extends Component {
      * Called when a radio button option for the mental state
      * radio buttons is selected. Sets the state with the value. 
      * 
-     * @param     {String : value}
+     * @param {String : value}
      */
     handleRadioButtonSelection = (value) => this.setState({ mindState: value });
 
@@ -171,8 +194,8 @@ export default class App extends Component {
      */
     handleScroll = throttle(() => {
         const storyBox = document.querySelector('.story-box');
-        const scrollOffset = document.querySelector('.mdl-layout__content').scrollTop;
-        const documentHeight = document.querySelector('.mdl-layout__content > .wrapper').offsetHeight;
+        const scrollOffset = (document.querySelector('.mdl-layout__content') as HTMLInputElement).scrollTop;
+        const documentHeight = (document.querySelector('.mdl-layout__content > .wrapper') as HTMLElement).offsetHeight;
         const scrollDistance = scrollOffset + window.innerHeight + 10;
 
         if (scrollOffset > SCROLL_BUFFER && !this.state.shouldScrollButtonBeVisible) {
@@ -248,7 +271,7 @@ export default class App extends Component {
      * updates the shown stories to match the entered term
      */
     updateSearchTerm = (e) => {
-        const updatedStories = this.state.stories.filter((story) => {
+        const updatedStories = this.state.stories.filter((story: any) => {
             return story.story.toLowerCase().includes(e.target.value.toLowerCase());
         }); 
 
@@ -356,7 +379,6 @@ export default class App extends Component {
                                         handleRadioButtonSelection={this.handleRadioButtonSelection}
                                         handleStoryBoxToggle={this.handleStoryBoxToggle}
                                         isPosting={this.state.isPosting}
-                                        isPosted={this.state.isPosted}
                                         isValidStory={this.state.isValidStory}
                                         mindState={this.state.mindState}
                                         shouldErrorMessageShow={this.state.shouldErrorMessageShow}

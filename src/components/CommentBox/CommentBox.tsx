@@ -1,10 +1,21 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import DebounceInput from 'react-debounce-input';
+// import DebounceInput from 'react-debounce-input';
 import './CommentBox.scss';
 
-export default class CommentBox extends Component {
-     constructor(props) {
+interface Props {
+    shouldCommentsShow: boolean;
+    shouldErrorMessageShow: boolean;
+    updateComment: any;
+    validateComment: any;
+};
+
+interface State {
+    isOffline: boolean;
+};
+
+export default class CommentBox extends Component<Props, State> {
+     constructor(props: Props) {
         super(props);
 
         this.state = {
@@ -51,24 +62,18 @@ export default class CommentBox extends Component {
 
           return (
                <article className={commentBoxClasses}>
-                    <DebounceInput
+                    <textarea
                          className='comment-box__comment'
-                         debounceTimeout={500}
-                         element='textarea'
-                         name='comment-box' 
-                         type='text'
+                         name='comment-box'
                          onChange={this.props.updateComment}
-                         placeholder="Leave a comment, but don't be a troll"
+                         placeholder="Leave a comment; Don't be a troll"
                     />
 
                     {this.props.shouldErrorMessageShow && <p className='error-message'>{errorMessage}</p>}
 
                     {this.state.isOffline && <p className='error-message'>{connectionErrorMessage}</p>}
 
-                    <button 
-                         className='comment-box__add-comment'
-                         onClick={this.onSubmit}
-                    >
+                    <button className='comment-box__add-comment' onClick={this.onSubmit} >
                         post
                     </button>
                </article>

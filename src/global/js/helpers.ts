@@ -5,8 +5,8 @@
 export const debounce = (func, wait, immediate) => {
     let timeout;
 
-    return () => {
-        const context = this, args = arguments;
+    return (...args) => {
+        const context = this;
         const later = function() {
             timeout = null;
             if (!immediate) func.apply(context, args);
@@ -26,9 +26,8 @@ export const throttle = (func, limit) => {
     let lastFunc;
     let lastRan;
 
-    return () => {
+    return (...args) => {
         const context = this;
-        const args = arguments;
 
         if (!inThrottle) {
             func.apply(context, args);

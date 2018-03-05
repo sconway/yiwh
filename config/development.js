@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-    entry: path.resolve(__dirname, '..', 'src/client/index.js'),
+    entry: path.resolve(__dirname, '..', 'src/client/index.tsx'),
 
     output: {
         path: path.resolve(__dirname, '..', 'dist'),
@@ -10,13 +10,15 @@ module.exports = {
         filename: 'client.js'
     },
 
+    devtool: "source-map",
+
     devServer: {
         contentBase: path.resolve(__dirname, '..', 'src/client'),
         publicPath: '/dist/'
     },
 
     resolve: {
-        extensions: ['.js', '.jsx'],
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
         modules: [
             path.join(__dirname, '../src'),
             "node_modules"
@@ -25,6 +27,10 @@ module.exports = {
 
     module: {
         rules: [
+            { 
+                test: /\.(ts|tsx)$/, 
+                loader: 'awesome-typescript-loader' 
+            },
             {
                 test: /\.jsx?$/,
                 loader: 'babel-loader',
@@ -55,10 +61,9 @@ module.exports = {
             }
         }),
         
-        // uglfy / minify js
         new webpack.optimize.UglifyJsPlugin({
             minimize: true,
-            // sourceMap: true,
+            sourceMap: true,
             compress:{
                 sequences: true,
                 dead_code: true,

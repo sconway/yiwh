@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './Footer.scss';
 
-const Footer = (props) => {
+interface Props {
+    domain: string;
+};
+
+const Footer = (props:Props) => {
     // Format the name that displays in the footer
     const domain = props.domain.length > 3 ? ' ' + props.domain : '...';
 
@@ -13,7 +17,9 @@ const Footer = (props) => {
     const handleClick = (e) => {
         e.preventDefault();
 
-        document.getElementById('emailText').select();
+        let emailText = document.getElementById('emailText') as HTMLInputElement;
+        
+        emailText.select();
         document.execCommand('copy');
         alert('email address copied to clipboard');
     };
@@ -28,9 +34,9 @@ const Footer = (props) => {
                     Contact
                 </a>
 
-                <div className='mdl-tooltip mdl-tooltip--large mdl-tooltip--top' htmlFor='tooltip'>
+                <label className='mdl-tooltip mdl-tooltip--large mdl-tooltip--top' htmlFor='tooltip'>
                     yesiwas.com@gmail.com
-                </div>
+                </label>
                 
                 <input className='email-input' defaultValue='yesiwas.com@gmail.com' id='emailText' type='text' />
             </div>

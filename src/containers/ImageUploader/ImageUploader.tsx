@@ -1,18 +1,28 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import Dropzone from 'react-dropzone';
-import Spinner from 'components/Spinner/Spinner';
+import Spinner from '../../components/Spinner/Spinner';
 import './ImageUploader.scss';
 
+interface Props {
+    domain: string;
+    updateStoryImage: any;
+};
 
-export default class ImageUploader extends Component {
+interface State {
+    didImageDrop: boolean;
+    didImageLoad: boolean;
+    imagePreview: string;
+};
+
+export default class ImageUploader extends Component<Props, State> {
     constructor(props) {
         super(props);
 
         this.state = {
             didImageDrop: false,
             didImageLoad: false,
-            imagePreview: null
+            imagePreview: ''
         };
     }
 
@@ -24,7 +34,7 @@ export default class ImageUploader extends Component {
         this.setState({
             didImageDrop: false,
             didImageLoad: false,
-            imagePreview: null
+            imagePreview: ''
         });
 
         // Set the image URL back to null in the parent's state.
