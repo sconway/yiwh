@@ -68,11 +68,6 @@ const initTwitterAPI = () => {
     access_token_key: process.env.HIGH_ACCESS_TOKEN_KEY,
     access_token_secret: process.env.HIGH_ACCESS_TOKEN_SECRET
   });
-  
-  console.log('CK: ', process.env.CONSUMER_KEY);
-  console.log('DTC: ', defaultTwitterClient);
-  console.log('DRTC: ', drunkTwitterClient);
-  console.log('hTC: ', highTwitterClient);
 }
 
 /**
