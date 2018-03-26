@@ -124,6 +124,9 @@ const postTweetWithImage = (tweet, id, mindState, imageURL, twitterClient) => {
           if (twitterClient) postTweet(twitterClient, newTweet);
           // Otherwise, post to the default cliend and mark the tweet as posted.
           else postTweet(defaultTwitterClient, newTweet, id, dataHandlers.setTweetPosted(db, id));
+        })
+        .catch((error) => {
+          console.log('ERROR POSTING TWEEET WITH IMAGE: ', error);
         });
     });
 
