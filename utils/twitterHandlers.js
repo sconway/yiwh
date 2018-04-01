@@ -28,12 +28,15 @@ const handlePointUpdates = (expressApp, dataBase) => {
     // Update the document with the new amount of points. 
     dataHandlers.setStoryPoints(db, storyID, points);
 
+    console.log("SET STORY POINTS");
+
     // Find the story based on the ID and see whether of not we should post it.
     db.collection('stories')
       .find(ObjectID(storyID))
       .forEach((story) => {
+        console.log("HAS BEEN POSTED: ", story.hasBeenPosted);
         // Post the tweet if it has enough points and hasn't been posted already.
-        if (!story.hasBeenPosted && points > TWEET_POINT_THRESHOLD) {
+        if (!story.hasBeenPosted && (points > TWEET_POINT_THRESHOLD)) {
           updateTweetBeforePosting(story.story, storyID, story.mindState, 
             story.storyImageUrl, getTwitterClient(story.mindState));
         }
@@ -79,6 +82,7 @@ const initTwitterAPI = () => {
  * @param {Function} : callBack 
  */
 const postTweet = (twitterClient, tweet, id, callBack) => {
+  console.log("ABOUT TO POST: ", tweet);
   // Make the post request, and handle the returned promise.
   twitterClient.post('statuses/update', tweet)
     .then(() => {
@@ -203,11 +207,13 @@ const updateTweetBeforePosting = (tweet, id, mindState, imageURL, twitterClient)
     tweet = `${tweet} #yesiwas${mindState} www.yesiwas${mindState}.com www.yesiwas.com`;
 
   if (imageURL) {
+    console.log("THIS TWEET HAS AN IMAGE");
     // If there is a specified Twitter client, post using that.
     if (twitterClient) postTweetWithImage(tweet, id, mindState, imageURL, twitterClient);
     // Post with the default Twitter client, regardless.
     postTweetWithImage(tweet, id, mindState, imageURL);
   } else {    
+    console.log("THIS TWEET DOES NOT HAVE AN IMAGE");
     // If there is a specified Twitter client, post using that.
     if (twitterClient) postTweet(twitterClient, {status: tweet});
     // Post with the default Twitter client, regardless.
