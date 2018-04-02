@@ -180,8 +180,12 @@ const postTweetWithImage = (tweet, id, mindState, imageURL, twitterClient) => {
   const makePost = (endpoint, params) => {
     return new Promise((resolve, reject) => {
       const client = twitterClient || defaultTwitterClient;
+      console.log("MAKING POST. CLIENT IS: ", client);
 
       client.post(endpoint, params, (error, data, response) => {
+        console.log("POSTING. ENDPOINT IS: ", endpoint);
+        console.log("POSTING. PARAMS ARE: ", params);
+        console.log("POSTING. ERROR IS: ", error);
         if (error) {
           reject(error);
         } else {
