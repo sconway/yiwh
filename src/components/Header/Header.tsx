@@ -24,10 +24,10 @@ const Header = (props:Props) => {
                 <div className='mdl-layout-spacer'></div>
 
                 <nav className='mdl-navigation mdl-layout--large-screen-only'>
-                    <a className='mdl-navigation__link' onClick={showTopRated}>Top Rated</a>
-                    <a className='mdl-navigation__link' onClick={showLowestRated}>Lowest Rated</a>
-                    <a className='mdl-navigation__link' onClick={showNewest}>Newest</a>
-                    <a className='mdl-navigation__link' onClick={showOldest}>Oldest</a>
+                    <a className='mdl-navigation__link' title='Top rated results' onClick={showTopRated}>Top Rated</a>
+                    <a className='mdl-navigation__link' title='Lowest rated results' onClick={showLowestRated}>Lowest Rated</a>
+                    <a className='mdl-navigation__link' title='Newest results' onClick={showNewest}>Newest</a>
+                    <a className='mdl-navigation__link' title='Oldest results' onClick={showOldest}>Oldest</a>
                 </nav>
 
                 <div className='mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right'>

@@ -29,7 +29,7 @@ const Footer = (props:Props) => {
             <div className='mdl-mini-footer__left-section'>
                 <div className='mdl-logo'>Yes, I was{domain} &copy; 2017</div>
 
-                <a href='' className='footer__contact' id='tooltip' onClick={handleClick}>
+                <a href='' title='Contact via email' className='footer__contact' id='tooltip' onClick={handleClick}>
                     <span className='icon material-icons'>email</span>
                     Contact
                 </a>
